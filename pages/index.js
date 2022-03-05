@@ -1,14 +1,17 @@
 import Head from 'next/head'
-import Image from 'next/image'
-import { Box, Text } from '@chakra-ui/react'
-import styles from '../styles/Home.module.css'
+import { Box } from '@chakra-ui/react'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import LandingContents from '@/components/pages/landing'
 
 const Home = () => {
     return (
         <Box>
-            <Text fontSize='32pt'>
-                Test
-            </Text>
+            <Head>
+                <title>Swift Shop | Home</title>
+            </Head>
+            <Navbar />
+            <LandingContents />
         </Box>
     )
 }
