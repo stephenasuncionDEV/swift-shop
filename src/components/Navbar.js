@@ -30,7 +30,7 @@ const Navbar = () => {
                     </NextLink>
                     <HStack alignItems='center' spacing='1.5em'>
                         <HStack spacing='.5em'>
-                            <NextLink href='/login' shallow passHref>
+                            <NextLink href='#pricing' shallow passHref>
                                 <Button background='none'>
                                     Login
                                 </Button>
