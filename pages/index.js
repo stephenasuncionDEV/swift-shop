@@ -12,6 +12,7 @@ const Home = () => {
             </Head>
             <Navbar />
             <LandingContents />
+            <Footer />
         </Box>
     )
 }
