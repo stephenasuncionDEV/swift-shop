@@ -36,7 +36,7 @@ const Products = () => {
 
                      {productsInfo.map((product, idx) => (
                     
-                        <Box mt="10px" p="10px" borderRadius="10px" maxW='300px' bg="#0c0b2b" textAlign="left">
+                        <Box mt="10px" p="10px" borderRadius="10px" maxW='300px' bg="#1A202C" textAlign="left">
                             <Box>
                                     <Image 
                                         mb="10px"
