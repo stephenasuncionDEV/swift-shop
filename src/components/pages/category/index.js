@@ -2,13 +2,11 @@ import { Flex, Image, Text, IconButton, HStack, Link, Button } from '@chakra-ui/
 import { SiDiscord, SiTwitter } from 'react-icons/si'
 import NextLink from 'next/link'
 
-
 const navInfo = [
     {url: '#', text: 'Shop'},
     {url: '#', text: 'Cart'},
     {url: '#', text: 'Payment'},
 ]
-
 
 const Navigation = () => {
     return (
@@ -37,22 +35,15 @@ const Navigation = () => {
                         </Link>
                     </NextLink>
                     <HStack alignItems='center' spacing='1.5em'>
-
-
                     {navInfo.map((link, idx) => (
-
-                        <HStack id={idx} spacing='.5em'>
+                        <HStack key={idx} spacing='.5em'>
                            <NextLink href={link.url} shallow passHref>
                                <Button background='none'>
                                    {link.text}
                                </Button>
                            </NextLink>
-
                        </HStack>
-
-
-                        ))}
-                        
+                    ))}
                     </HStack>
                 </Flex>
             </Flex>

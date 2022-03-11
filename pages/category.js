@@ -9,11 +9,10 @@ const Category = () => {
     return (
         <Box>
             <Head>
-                <title>Swift Shop | Home</title>
+                <title>Category | Swift Shop</title>
             </Head>
             <Navigation />
-            <Products />
-            
+            <Products />        
             <Footer />
         </Box>
     )

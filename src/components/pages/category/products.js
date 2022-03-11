@@ -2,7 +2,6 @@ import { Flex, Image, Text, IconButton, HStack, Link, Button,Box, Heading, VStac
 import { SiDiscord, SiTwitter } from 'react-icons/si'
 import NextLink from 'next/link'
 
-
 const categoryName={
     name:'Laptops',
     desc:'Whether you’re working, creating, gaming, or just surfing, we have a huge range of amazing laptops for you at incredible prices.'

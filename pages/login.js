@@ -8,7 +8,7 @@ const Home = () => {
     return (
         <Box>
             <Head>
-                <title>Swift Shop | Login</title>
+                <title>Log in | Swift Shop</title>
             </Head>
             <LoginContents />
         </Box>
