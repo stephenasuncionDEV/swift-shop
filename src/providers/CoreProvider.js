@@ -10,6 +10,8 @@ export const useCore = () => useContext(CoreContext)
 export const CoreProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
     const [hotDeals, setHotDeals] = useState([]);
+    const [categoryProducts, setCategoryProducts] = useState([]);
+    const [categoryProductsLoading, setCategoryProductsLoading] = useState(false);
 
     useEffect(() => {
         const getProducts = async () => {
@@ -17,8 +19,6 @@ export const CoreProvider = ({ children }) => {
             // Get all products
             const res = await commerce.products.list();
             setProducts(res.data);
-
-            console.log(res.data[0])
 
             // Get hot deals
             let tempHotDeals = [];
@@ -31,9 +31,22 @@ export const CoreProvider = ({ children }) => {
         getProducts();
     }, [])
 
+    const getCategoryProducts = async (category) => {
+        setCategoryProductsLoading(true);
+        const res = await commerce.products.list({
+            category_slug: [category]
+        });
+        console.log(res.data)
+        setCategoryProducts(res.data);
+        setCategoryProductsLoading(false);
+    }
+
     const controllers = {
         products,
-        hotDeals
+        hotDeals,
+        categoryProducts,
+        getCategoryProducts,
+        categoryProductsLoading,
     }
 
     return (

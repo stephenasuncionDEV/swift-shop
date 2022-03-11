@@ -1,73 +1,54 @@
-import { Flex, Image, Text, IconButton, HStack, Link, Button,Box, Heading, VStack } from '@chakra-ui/react'
-import { SiDiscord, SiTwitter } from 'react-icons/si'
-import NextLink from 'next/link'
+import { Flex, Image, Text, IconButton, HStack, Link, Button,Box, Heading, VStack, Spinner } from '@chakra-ui/react'
 import useProducts from './hooks/useProducts'
-
-const categoryName = {
-    name:'Laptops',
-    desc:'Whether youre working, creating, gaming, or just surfing, we have a huge range of amazing laptops for you at incredible prices.'
-}
-
-const productsInfo = [
-    {name: 'Name',des:"Awesome product", price: 200,src:"#"},
-    {name: 'Name', des:"Awesome product",price: 300,src:"#"},
-    {name: 'Name', des:"Awesome product",price: 400,src:"#"},
-    {name: 'Name', des:"Awesome product",price: 400,src:"#"},
-    {name: 'Name', des:"Awesome product",price: 400,src:"#"},
-    {name: 'Name', des:"Awesome product",price: 400,src:"#"},
-    {name: 'Name', des:"Awesome product",price: 400,src:"#"},
-    {name: 'Name', des:"Awesome product",price: 400,src:"#"}
-    
-]
+import { useCore } from '@/providers/CoreProvider'
+import { BsFillCartPlusFill } from 'react-icons/bs'
 
 const Products = () => {
+    const { category } = useProducts();
+    const { categoryProducts, categoryProductsLoading } = useCore();
+
     return (
         <Flex mt="10px" flexWrap="wrap" px="24px" justifyContent='center'>
-
-            <Flex  maxW='8xl' w='full' flexDir='column' >
-
-                <Flex flexDir='column'>
-                    <Heading>{categoryName.name}</Heading>
-                    <Text>{categoryName.desc}</Text>
-                </Flex>
-                <Flex flexDir='row' mt="20px" flexWrap="wrap" px="24px" justifyContent='space-around'  p="10px" bg="white">
-
-
-
-                     {productsInfo.map((product, idx) => (
-                    
-                        <Box mt="10px" p="10px" borderRadius="10px" maxW='300px' bg="#1A202C" textAlign="left">
-                            <Box>
+            {!categoryProductsLoading ? (
+                <Flex maxW='8xl' w='full' flexDir='column' >
+                    <Flex flexDir='column'>
+                        <Heading>{categoryProducts[0]?.categories[0]?.name}</Heading>
+                        {/* <Text>{categoryName.desc}</Text> */}
+                    </Flex>
+                    <Flex flexDir='row' mt="20px" flexWrap="wrap" px="24px" justifyContent='space-evenly' p="10px" >
+                        {categoryProducts?.map((product, idx) => (     
+                            <Box key={idx} mt="10px" p="10px" borderRadius="10px" maxW='300px' bg="rgb(17,20,28)" textAlign="left" mb='2em'>
+                                <Box>
                                     <Image 
                                         mb="10px"
                                         boxSize='275px'
                                         objectFit='cover'
-                                        src={product.src}
+                                        src={product.image.url}
                                         fallbackSrc = 'https://via.placeholder.com/300'
                                     />
-                            </Box>
-                                    <Text>{product.name}</Text>
-                                    <Text fontSize='10pt' color='whiteAlpha.500'>
-                                        {product.des}
-                                    </Text>
-                                    <Text fontWeight='bold'>${product.price}</Text>
-
-                            <Flex mt="10px" justifyContent='space-evenly'>
-                                <Button>View Details</Button>
-                                
-                                <Button>Add to cart</Button>
-
-                            </Flex>
-
-                                    
-                        </Box>
-                       
-                    ))}
-
+                                </Box>
+                                <Text noOfLines={2}>{product.name}</Text>
+                                <Text fontWeight='bold' mt='.5em'>${product.price.formatted}</Text>
+                                <Text fontSize='10pt' color='whiteAlpha.500' mt='.5em' noOfLines={5}>
+                                    {product.description.replaceAll('<p>', '').replaceAll('</p>', '')}
+                                </Text>
+                                <Flex mt="1em" justifyContent='flex-end'>
+                                    <Button size='sm'>View Details</Button>
+                                    <Button rightIcon={<BsFillCartPlusFill />} size='sm' ml='.5em'>Add to cart</Button>
+                                </Flex>       
+                            </Box>                  
+                        ))}
+                    </Flex>
                 </Flex>
-            </Flex>
-
-            
+            ) : (
+                <Spinner
+                    thickness='4px'
+                    speed='0.65s'
+                    emptyColor='gray.200'
+                    color='blue.500'
+                    size='xl'
+                />
+            )}     
         </Flex>
     )
 }
