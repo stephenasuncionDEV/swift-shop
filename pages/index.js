@@ -8,7 +8,7 @@ const Home = () => {
     return (
         <Box>
             <Head>
-                <title>Swift Shop | Home</title>
+                <title>Home | Swift Shop</title>
             </Head>
             <Navbar />
             <LandingContents />

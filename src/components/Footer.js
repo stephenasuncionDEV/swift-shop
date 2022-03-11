@@ -6,7 +6,8 @@ const Footer = () => {
             <Flex maxW='8xl' w='full' px='24px' justifyContent='space-between'>
                 <VStack alignItems='flex-start'>
                     <Image
-                        src='assets/logo-white.png'
+                        src='/assets/logo-white.png'
+                        alt='Swift NFT Logo'
                         w='250px'
                     />
                     <Text>
