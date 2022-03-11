@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { Box } from '@chakra-ui/react'
-import Navigation from '@/components/pages/category'
-import Products from '@/components/pages/category/products'
+import Navbar from '@/components/Navbar'
+import Products from '@/components/pages/category'
 import Footer from '@/components/Footer'
 import LandingContents from '@/components/pages/landing'
 
@@ -11,8 +11,8 @@ const Category = () => {
             <Head>
                 <title>Category | Swift Shop</title>
             </Head>
-            <Navigation />
-            <Products />        
+            <Navbar />
+            <Products />
             <Footer />
         </Box>
     )
