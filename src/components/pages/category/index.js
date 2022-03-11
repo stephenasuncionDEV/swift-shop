@@ -4,7 +4,7 @@ import { useCore } from '@/providers/CoreProvider'
 import { BsFillCartPlusFill } from 'react-icons/bs'
 
 const Products = () => {
-    const { category } = useProducts();
+    useProducts();
     const { categoryProducts, categoryProductsLoading } = useCore();
 
     return (
@@ -13,7 +13,7 @@ const Products = () => {
                 <Flex maxW='8xl' w='full' flexDir='column' >
                     <Flex flexDir='column'>
                         <Heading>{categoryProducts[0]?.categories[0]?.name}</Heading>
-                        {/* <Text>{categoryName.desc}</Text> */}
+                        <Text>A list of available products under the category {categoryProducts[0]?.categories[0]?.name}.</Text>
                     </Flex>
                     <Flex flexDir='row' mt="20px" flexWrap="wrap" px="24px" justifyContent='space-evenly' p="10px" >
                         {categoryProducts?.map((product, idx) => (     
