@@ -1,10 +1,11 @@
 import { Box, Flex, ScaleFade, VStack, Text, InputGroup, InputLeftElement, Input, Button, Alert, AlertIcon, Image } from '@chakra-ui/react'
 import { FiMail, FiLock } from 'react-icons/fi'
-import { useLogin } from './hooks/useLogin'
+import { useUser } from '@/providers/UserProvider'
 
 const LoginContents = () => {
-    const { email, setEmail } = useLogin();
-
+    const { email, setEmail, LoginAsGuest, isEmailWrong, protectLoginPage } = useUser();
+    protectLoginPage();
+    
     return (
         <Box>
             <Flex justifyContent='center' alignItems='center' h='100vh'>
@@ -40,15 +41,17 @@ const LoginContents = () => {
                                     <Input type='email' placeholder='you@domain.com' value={email} onChange={(e) => setEmail(e.target.value)} />
                                 </InputGroup>
                             </VStack>
-                            {/* <VStack w='full'>
-                                <Alert status='error' size='sm'>
-                                    <AlertIcon />
-                                    <Text fontSize='10pt'>
-                                        Email is Incorrect
-                                    </Text>
-                                </Alert>
-                            </VStack> */}
-                            <Button w='full'>
+                            {isEmailWrong && (
+                                <VStack w='full'>
+                                    <Alert status='error' size='sm'>
+                                        <AlertIcon />
+                                        <Text fontSize='10pt'>
+                                            Invalid email address
+                                        </Text>
+                                    </Alert>
+                                </VStack>
+                            )}
+                            <Button w='full' onClick={LoginAsGuest}>
                                 Login as guest
                             </Button>
                         </VStack>

@@ -1,8 +1,11 @@
 import { Flex, Image, Text, IconButton, HStack, Link, Button } from '@chakra-ui/react'
 import { SiDiscord, SiTwitter } from 'react-icons/si'
 import NextLink from 'next/link'
+import { useUser } from '@/providers/UserProvider'
 
 const Navbar = () => {
+    const { isLoggedIn } = useUser();
+
     return (
         <header>
             <Flex justifyContent='center'>
@@ -30,11 +33,19 @@ const Navbar = () => {
                     </NextLink>
                     <HStack alignItems='center' spacing='1.5em'>
                         <HStack spacing='.5em'>
-                            <NextLink href='/login' shallow passHref>
-                                <Button background='none'>
-                                    Login
-                                </Button>
-                            </NextLink>
+                            {isLoggedIn ? (
+                                <NextLink href='/shop' shallow passHref>
+                                    <Button background='none'>
+                                        Go to Shop
+                                    </Button>
+                                </NextLink>
+                            ) : (
+                                <NextLink href='/login' shallow passHref>
+                                    <Button background='none'>
+                                        Login
+                                    </Button>
+                                </NextLink>
+                            )}
                         </HStack>
                     </HStack>
                 </Flex>
