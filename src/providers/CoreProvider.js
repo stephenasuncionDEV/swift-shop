@@ -36,9 +36,13 @@ export const CoreProvider = ({ children }) => {
         const res = await commerce.products.list({
             category_slug: [category]
         });
-        console.log(res.data)
         setCategoryProducts(res.data);
         setCategoryProductsLoading(false);
+    }
+
+    const getCategory = async () => {
+        const res = await commerce.categories.list();
+        return res.data;
     }
 
     const controllers = {
@@ -47,6 +51,7 @@ export const CoreProvider = ({ children }) => {
         categoryProducts,
         getCategoryProducts,
         categoryProductsLoading,
+        getCategory,
     }
 
     return (
