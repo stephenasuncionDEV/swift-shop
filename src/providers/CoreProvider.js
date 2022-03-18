@@ -15,7 +15,6 @@ export const CoreProvider = ({ children }) => {
 
     useEffect(() => {
         const getProducts = async () => {
-
             // Get all products
             const res = await commerce.products.list();
             setProducts(res.data);
@@ -33,9 +32,11 @@ export const CoreProvider = ({ children }) => {
 
     const getCategoryProducts = async (category) => {
         setCategoryProductsLoading(true);
+
         const res = await commerce.products.list({
             category_slug: [category]
         });
+
         setCategoryProducts(res.data);
         setCategoryProductsLoading(false);
     }
@@ -45,6 +46,11 @@ export const CoreProvider = ({ children }) => {
         return res.data;
     }
 
+    const getProduct = async (productId) => {
+        const res = await commerce.products.retrieve(productId);
+        return res;
+    }
+
     const controllers = {
         products,
         hotDeals,
@@ -52,6 +58,7 @@ export const CoreProvider = ({ children }) => {
         getCategoryProducts,
         categoryProductsLoading,
         getCategory,
+        getProduct
     }
 
     return (

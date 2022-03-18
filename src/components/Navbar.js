@@ -35,14 +35,14 @@ const Navbar = ({ isLanding = false }) => {
                         <HStack spacing='.5em'>
                             {isLanding && (
                                 <>
-                                    <NextLink href='#features' shallow passHref>
-                                        <Button background='none'>
-                                            Features ✨
-                                        </Button>
-                                    </NextLink>
                                     <NextLink href='#hotdeals' shallow passHref>
                                         <Button background='none'>
                                             Hot Deals 🔥
+                                        </Button>
+                                    </NextLink>
+                                    <NextLink href='#features' shallow passHref>
+                                        <Button background='none'>
+                                            Features ✨
                                         </Button>
                                     </NextLink>
                                 </>
@@ -50,7 +50,7 @@ const Navbar = ({ isLanding = false }) => {
                             {isLoggedIn ? (
                                 <NextLink href='/shop' shallow passHref>
                                     <Button background='none'>
-                                        Go to Shop
+                                        Shop
                                     </Button>
                                 </NextLink>
                             ) : (

@@ -1,10 +1,10 @@
 import { Flex, Image, Text, IconButton, HStack, Link, Button,Box, Heading, VStack, Spinner } from '@chakra-ui/react'
-import useProducts from './hooks/useProducts'
+import { useCategory } from './hooks/useCategory'
 import { useCore } from '@/providers/CoreProvider'
 import { BsFillCartPlusFill } from 'react-icons/bs'
 
-const Products = () => {
-    useProducts();
+const Category = () => {
+    useCategory();
     const { categoryProducts, categoryProductsLoading } = useCore();
 
     return (
@@ -53,4 +53,4 @@ const Products = () => {
     )
 }
 
-export default Products
+export default Category

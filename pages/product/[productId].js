@@ -4,7 +4,6 @@ import Navbar from '@/components/Navbar'
 import ProductContent from '@/components/pages/product'
 import Footer from '@/components/Footer'
 
-
 const Product = () => {
     return (
         <Box>
@@ -12,8 +11,7 @@ const Product = () => {
                 <title>Swift Shop | Home</title>
             </Head>
             <Navbar />
-            <ProductContent />
-            
+            <ProductContent />      
             <Footer />
         </Box>
     )

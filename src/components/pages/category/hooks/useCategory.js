@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useCore } from '@/providers/CoreProvider'
 
-const useProducts = () => {
+export const useCategory = () => {
     const { getCategoryProducts } = useCore();
     const router = useRouter();
     const { category } = router.query;
@@ -12,5 +12,3 @@ const useProducts = () => {
         getCategoryProducts(category);
     }, [category])
 }
-
-export default useProducts
