@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         const check = localStorage.getItem('swiftshop-email');
-        if (!check) return;
+        if (!check || !check.length) return;
         setEmail(check);
         setIsLoggedIn(true);
     }, [])
@@ -47,6 +47,12 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    const Logout = () => {
+        localStorage.removeItem('swiftshop-email');
+        setIsLoggedIn(false);
+        router.push('/', undefined, { shallow: true });
+    }
+
     const controllers = {
         email,
         setEmail,
@@ -55,6 +61,7 @@ export const UserProvider = ({ children }) => {
         LoginAsGuest,
         isEmailWrong,
         protectLoginPage,
+        Logout,
     }
 
     return (

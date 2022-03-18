@@ -10,7 +10,7 @@ const Home = () => {
             <Head>
                 <title>Home | Swift Shop</title>
             </Head>
-            <Navbar isLanding/>
+            <Navbar isLanding isHome={false} />
             <LandingContents />
             <Footer />
         </Box>

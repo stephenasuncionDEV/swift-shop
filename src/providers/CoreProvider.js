@@ -9,7 +9,7 @@ export const useCore = () => useContext(CoreContext)
 
 export const CoreProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
-    const [hotDeals, setHotDeals] = useState([]);
+    const [hotDeals, setHotDeals] = useState();
     const [categoryProducts, setCategoryProducts] = useState([]);
     const [categoryProductsLoading, setCategoryProductsLoading] = useState(false);
 

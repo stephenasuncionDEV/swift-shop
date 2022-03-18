@@ -3,8 +3,8 @@ import { SiDiscord, SiTwitter } from 'react-icons/si'
 import NextLink from 'next/link'
 import { useUser } from '@/providers/UserProvider'
 
-const Navbar = ({ isLanding = false }) => {
-    const { isLoggedIn } = useUser();
+const Navbar = ({ isLanding = false, isHome = true }) => {
+    const { isLoggedIn, Logout } = useUser();
 
     return (
         <header>
@@ -48,11 +48,28 @@ const Navbar = ({ isLanding = false }) => {
                                 </>
                             )}
                             {isLoggedIn ? (
-                                <NextLink href='/shop' shallow passHref>
-                                    <Button background='none'>
-                                        Shop
+                                <>
+                                    {isHome && (
+                                        <NextLink href='/' shallow passHref>
+                                            <Button background='none'>
+                                                Home 🏠
+                                            </Button>
+                                        </NextLink>
+                                    )}
+                                    <NextLink href='/shop' shallow passHref>
+                                        <Button background='none'>
+                                            Categories 🛍️
+                                        </Button>
+                                    </NextLink>
+                                    <NextLink href='/cart' shallow passHref>
+                                        <Button background='none'>
+                                            My Cart 🛒
+                                        </Button>
+                                    </NextLink>
+                                    <Button background='none' onClick={Logout}>
+                                        Logout
                                     </Button>
-                                </NextLink>
+                                </>
                             ) : (
                                 <NextLink href='/login' shallow passHref>
                                     <Button background='none'>
