@@ -17,3 +17,15 @@ a {
 * {
     box-sizing: border-box;
 }
+
+input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    box-shadow: 0 0 0 1000px rgb(17,20,28) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px rgb(17,20,28) inset !important;
+    -webkit-text-fill-color: white !important;
+}
+
+label {
+    touch-action: none;
+}
