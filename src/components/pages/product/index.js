@@ -1,6 +1,8 @@
 import { Flex, Image, Text, Button,Box, Heading, VStack, Spinner, SlideFade } from '@chakra-ui/react'
+import NextLink from 'next/link'
 import { useProduct } from './hooks/useProduct'
 import { BsFillCartPlusFill } from 'react-icons/bs'
+import { FiExternalLink } from 'react-icons/fi'
 
 const ProductContent = () => {
     const { product } = useProduct();
@@ -37,9 +39,9 @@ const ProductContent = () => {
                 </Flex> 
                 <SlideFade in={true} offsetY='20px' delay={.45}>
                     <Flex justifyContent='space-evenly' p='2em' flexWrap='wrap'>
-                        <Text fontSize="3xl" flexBasis="100%">Similar Products:</Text>
+                        <Text fontSize="3xl" flexBasis="100%" mt='2em' mb='1em'>Related Products:</Text>
                         {product?.related_products?.map((product, idx) => (
-                            <VStack key={idx} p="10px" borderRadius="10px" maxW='275px'>
+                            <VStack key={idx} p="10px" borderRadius="10px" maxW='275px' bg='rgb(17,20,28)'>
                                 <Image 
                                     mb="10px"
                                     boxSize='275px'
@@ -51,6 +53,13 @@ const ProductContent = () => {
                                 <Text noOfLines={5} fontSize='10pt' color='whiteAlpha.500'>
                                     {product.description.replaceAll('<p>', '').replaceAll('</p>', '')}
                                 </Text>
+                                <Flex justifyContent='flex-end' w='full'>
+                                    <NextLink href={`/product/${product.id}`} shallow passHref>
+                                        <Button rightIcon={<FiExternalLink />}>
+                                            Shop 
+                                        </Button>
+                                    </NextLink>
+                                </Flex>
                             </VStack>
                         ))}
                     </Flex>
