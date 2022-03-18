@@ -1,4 +1,4 @@
-import { Box, Text, Image, Flex, Heading, Button, Link, VStack, HStack, SlideFade } from '@chakra-ui/react'
+import { Box, Text, Image, Flex, Heading, Button, VStack, HStack, SlideFade } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { useCore } from '@/providers/CoreProvider'
 import { useUser } from '@/providers/UserProvider'

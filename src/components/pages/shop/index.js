@@ -1,4 +1,4 @@
-import { Box, Text, Image, Flex, Button, Link, VStack, HStack, SlideFade, Wrap, WrapItem, IconButton } from '@chakra-ui/react'
+import { Box, Text, Flex, Button, Wrap, WrapItem, IconButton } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { FiExternalLink } from 'react-icons/fi'
 import { useShop } from './hooks/useShop'

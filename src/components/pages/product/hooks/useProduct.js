@@ -5,7 +5,7 @@ import { useCore } from '@/providers/CoreProvider'
 export const useProduct = () => {
     const { getProduct } = useCore();
     const router = useRouter();
-    const [product, setProduct] = useState({});
+    const [product, setProduct] = useState();
     const { productId } = router.query;
 
     useEffect(() => {

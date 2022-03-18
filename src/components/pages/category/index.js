@@ -1,4 +1,5 @@
-import { Flex, Image, Text, IconButton, HStack, Link, Button,Box, Heading, VStack, Spinner } from '@chakra-ui/react'
+import { Flex, Image, Text, Button,Box, Heading, Spinner } from '@chakra-ui/react'
+import NextLink from 'next/link'
 import { useCategory } from './hooks/useCategory'
 import { useCore } from '@/providers/CoreProvider'
 import { BsFillCartPlusFill } from 'react-icons/bs'
@@ -32,10 +33,12 @@ const Category = () => {
                                 <Text fontSize='10pt' color='whiteAlpha.500' mt='.5em' noOfLines={5}>
                                     {product.description.replaceAll('<p>', '').replaceAll('</p>', '')}
                                 </Text>
-                                <Flex mt="1em" justifyContent='flex-end'>
-                                    <Button size='sm'>View Details</Button>
-                                    <Button rightIcon={<BsFillCartPlusFill />} size='sm' ml='.5em'>Add to cart</Button>
-                                </Flex>       
+                                <NextLink href={`/product/${product.id}`} shallow passHref>
+                                    <Flex mt="1em" justifyContent='flex-end'>
+                                        <Button size='sm'>View Details</Button>
+                                        <Button rightIcon={<BsFillCartPlusFill />} size='sm' ml='.5em'>Add to cart</Button>
+                                    </Flex>
+                                </NextLink>
                             </Box>                  
                         ))}
                     </Flex>
