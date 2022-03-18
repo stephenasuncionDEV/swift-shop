@@ -28,6 +28,14 @@ export const UserProvider = ({ children }) => {
             setIsLoggedIn(true);
 
             router.push('/shop', undefined, { shallow: true });
+
+            toast({
+                title: 'Success',
+                description: `Successfully logged in as ${email}`,
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            })
         }
         catch (err) {
             setIsEmailWrong(true);
@@ -53,6 +61,17 @@ export const UserProvider = ({ children }) => {
         router.push('/', undefined, { shallow: true });
     }
 
+    const CopyEmail = () => {
+        navigator.clipboard.writeText(email);
+        toast({
+            title: 'Success',
+            description: 'Copied email to clipboard',
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+        })
+    }
+
     const controllers = {
         email,
         setEmail,
@@ -62,6 +81,7 @@ export const UserProvider = ({ children }) => {
         isEmailWrong,
         protectLoginPage,
         Logout,
+        CopyEmail,
     }
 
     return (
