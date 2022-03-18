@@ -3,7 +3,7 @@ import { SiDiscord, SiTwitter } from 'react-icons/si'
 import NextLink from 'next/link'
 import { useUser } from '@/providers/UserProvider'
 
-const Navbar = () => {
+const Navbar = ({ isLanding = false }) => {
     const { isLoggedIn } = useUser();
 
     return (
@@ -33,6 +33,20 @@ const Navbar = () => {
                     </NextLink>
                     <HStack alignItems='center' spacing='1.5em'>
                         <HStack spacing='.5em'>
+                            {isLanding && (
+                                <>
+                                    <NextLink href='#features' shallow passHref>
+                                        <Button background='none'>
+                                            Features ✨
+                                        </Button>
+                                    </NextLink>
+                                    <NextLink href='#hotdeals' shallow passHref>
+                                        <Button background='none'>
+                                            Hot Deals 🔥
+                                        </Button>
+                                    </NextLink>
+                                </>
+                            )}
                             {isLoggedIn ? (
                                 <NextLink href='/shop' shallow passHref>
                                     <Button background='none'>
