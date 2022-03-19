@@ -32,7 +32,6 @@ export const CoreProvider = ({ children }) => {
             setHotDeals(tempHotDeals);
 
             await getCart();
-
         }
         getProducts();
     }, [])
@@ -87,6 +86,7 @@ export const CoreProvider = ({ children }) => {
 
     const getCart = async () => {
         const res = await commerce.cart.contents();
+        console.log(res);
         setCart(res);
     }
 

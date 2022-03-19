@@ -1,14 +1,13 @@
 import { Flex, Image, Text, Button, Box, Heading, VStack, Spinner, SlideFade, HStack, Tag, IconButton } from '@chakra-ui/react'
 import NextLink from 'next/link'
-import { BsFillCartPlusFill } from 'react-icons/bs'
 import { BsTrashFill } from 'react-icons/bs'
-import { FiExternalLink } from 'react-icons/fi'
+import { BiPurchaseTag } from 'react-icons/bi'
 import { useCore } from '@/providers/CoreProvider'
 import { useCart } from './hooks/useCart'
 
 const CartContent = () => {
     const { cart, removeItemCart } = useCore();
-    useCart();
+    const { total } = useCart();
 
     return (
         <Flex mt="10px" justifyContent="center" wrap="wrap">
@@ -68,9 +67,17 @@ const CartContent = () => {
                             </HStack>
                         </VStack>
                         <VStack p='2em' flex='1' alignItems='flex-start'>
-                            <Text>
-                                Test
+                            <Text fontSize='32pt'>
+                                Price
                             </Text>
+                            <Text>
+                                Product Total : ${total}
+                            </Text>
+                            <Flex w='full' justifyContent='flex-end'>
+                                <Button rightIcon={<BiPurchaseTag />} bg='yellow.600'>
+                                    Checkout
+                                </Button>
+                            </Flex>
                         </VStack>
                     </HStack>
                 </VStack>
