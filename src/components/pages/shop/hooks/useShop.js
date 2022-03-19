@@ -13,8 +13,6 @@ export const useShop = () => {
             const category = await getCategory();
             setCategories(category);
 
-            console.log(category)
-
             setIsCategoryLoading(false);
 		})()
     }, [])

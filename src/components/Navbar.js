@@ -2,9 +2,11 @@ import { Flex, Image, Text, IconButton, HStack, Link, Button, Tag, TagRightIcon,
 import { FiCopy } from 'react-icons/fi'
 import NextLink from 'next/link'
 import { useUser } from '@/providers/UserProvider'
+import { useCore } from '@/providers/CoreProvider'
 
 const Navbar = ({ isLanding = false, isHome = true }) => {
     const { isLoggedIn, Logout, email, CopyEmail } = useUser();
+    const { cart } = useCore();
 
     return (
         <header>
@@ -57,16 +59,20 @@ const Navbar = ({ isLanding = false, isHome = true }) => {
                                                 </Button>
                                             </NextLink>
                                         )}
-                                        <NextLink href='/shop' shallow passHref>
-                                            <Button background='none'>
-                                                Categories 🛍️
-                                            </Button>
-                                        </NextLink>
-                                        <NextLink href='/cart' shallow passHref>
-                                            <Button background='none'>
-                                                My Cart 🛒
-                                            </Button>
-                                        </NextLink>
+                                        {!isLanding && (
+                                            <>
+                                            <NextLink href='/shop' shallow passHref>
+                                                <Button background='none'>
+                                                    Categories 🛍️
+                                                </Button>
+                                            </NextLink>
+                                            <NextLink href='/cart' shallow passHref>
+                                                <Button background='none'>
+                                                    My Cart &nbsp; <Tag size='sm'>{cart ? cart?.length : 0}</Tag> &nbsp;🛒
+                                                </Button>
+                                            </NextLink>
+                                            </>
+                                        )}
                                     </HStack>
                                     <HStack>
                                         <Tag bg='rgba(67,122,255,0.5)' cursor='pointer' onClick={CopyEmail}>

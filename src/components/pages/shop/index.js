@@ -4,7 +4,7 @@ import { FiExternalLink } from 'react-icons/fi'
 import { useShop } from './hooks/useShop'
 
 const ShopContents = () => {
-    const { categories } = useShop();
+    const { categories,  } = useShop();
 
     return ( 
         <Flex mt="10px" flexWrap="wrap" px="24px" justifyContent='center'>
@@ -30,7 +30,7 @@ const ShopContents = () => {
                                     </NextLink>
                                     <NextLink href={`/category/${category.name.toLowerCase()}`} shallow passHref>
                                         <IconButton 
-                                            aria-label='Delete Project' 
+                                            aria-label='Visit Category' 
                                             position='absolute'
                                             top='-2.5'
                                             right='-2.5'

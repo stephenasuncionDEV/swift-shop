@@ -1,11 +1,13 @@
 import { useState, useEffect, useContext, createContext } from 'react'
 import { useRouter } from 'next/router'
 import { useToast } from '@chakra-ui/react'
+import { useCore } from '@/providers/CoreProvider'
 
 export const UserContext = createContext({})
 export const useUser = () => useContext(UserContext)
 
 export const UserProvider = ({ children }) => {
+    const { addCustomer } = useCore();
     const [email, setEmail] = useState('');
     const [isEmailWrong, setIsEmailWrong] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,7 +21,7 @@ export const UserProvider = ({ children }) => {
         setIsLoggedIn(true);
     }, [])
 
-    const LoginAsGuest = () => {
+    const LoginAsGuest = async () => {
         try {
             if (!email.length) throw new Error('Must enter an email address');
             if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) throw new Error('Invalid email address');
@@ -27,7 +29,9 @@ export const UserProvider = ({ children }) => {
             localStorage.setItem('swiftshop-email', email);
             setIsLoggedIn(true);
 
-            router.push('/shop', undefined, { shallow: true });
+            await addCustomer(email);
+            
+            //router.push('/shop', undefined, { shallow: true });
 
             toast({
                 title: 'Success',
@@ -57,6 +61,7 @@ export const UserProvider = ({ children }) => {
 
     const Logout = () => {
         localStorage.removeItem('swiftshop-email');
+        localStorage.removeItem('swiftshop-token');
         setIsLoggedIn(false);
         router.push('/', undefined, { shallow: true });
     }

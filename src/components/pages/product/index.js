@@ -3,8 +3,10 @@ import NextLink from 'next/link'
 import { useProduct } from './hooks/useProduct'
 import { BsFillCartPlusFill } from 'react-icons/bs'
 import { FiExternalLink } from 'react-icons/fi'
+import { useCore } from '@/providers/CoreProvider'
 
 const ProductContent = () => {
+    const { AddToCart, isAddingCart } = useCore();
     const { product } = useProduct();
 
     return (
@@ -19,7 +21,7 @@ const ProductContent = () => {
                 />
             ) : (
                 <>
-                    <Flex bg="rgb(17,20,28)" p="24px" wrap="wrap" >
+                <Flex bg="rgb(17,20,28)" p="24px" wrap="wrap" >
                     <Image 
                         mb="10px"
                         boxSize='400px'
@@ -33,7 +35,7 @@ const ProductContent = () => {
                         <Text fontWeight='bold'>Overview</Text>
                         <Text>${product?.description?.replaceAll('<p>', '').replaceAll('</p>', '')}</Text>
                         <Box mt="20px"> 
-                        <Button rightIcon={<BsFillCartPlusFill />} size='sm' ml='.5em'>Add to cart</Button>
+                        <Button rightIcon={<BsFillCartPlusFill />} size='sm' ml='.5em' onClick={() => AddToCart(product.id)} disabled={isAddingCart}>Add to cart</Button>
                         </Box>
                     </Box>
                 </Flex> 

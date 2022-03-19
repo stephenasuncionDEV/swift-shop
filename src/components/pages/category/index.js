@@ -6,7 +6,7 @@ import { BsFillCartPlusFill } from 'react-icons/bs'
 
 const Category = () => {
     useCategory();
-    const { categoryProducts, categoryProductsLoading } = useCore();
+    const { categoryProducts, categoryProductsLoading, AddToCart, isAddingCart } = useCore();
 
     return (
         <Flex mt="10px" flexWrap="wrap" px="24px" justifyContent='center'>
@@ -33,12 +33,12 @@ const Category = () => {
                                 <Text fontSize='10pt' color='whiteAlpha.500' mt='.5em' noOfLines={5}>
                                     {product.description.replaceAll('<p>', '').replaceAll('</p>', '')}
                                 </Text>
-                                <NextLink href={`/product/${product.id}`} shallow passHref>
-                                    <Flex mt="1em" justifyContent='flex-end'>
+                                <Flex mt="1em" justifyContent='flex-end'>
+                                    <NextLink href={`/product/${product.id}`} shallow passHref>
                                         <Button size='sm'>View Details</Button>
-                                        <Button rightIcon={<BsFillCartPlusFill />} size='sm' ml='.5em'>Add to cart</Button>
-                                    </Flex>
-                                </NextLink>
+                                    </NextLink>
+                                    <Button rightIcon={<BsFillCartPlusFill />} size='sm' ml='.5em' onClick={() => AddToCart(product.id)} disabled={isAddingCart}>Add to cart</Button>
+                                </Flex>
                             </Box>                  
                         ))}
                     </Flex>

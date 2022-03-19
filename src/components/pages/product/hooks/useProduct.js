@@ -13,7 +13,6 @@ export const useProduct = () => {
 
         (async () => {
             const res = await getProduct(productId);
-            console.log(res)
             setProduct(res);
 		})()
 
