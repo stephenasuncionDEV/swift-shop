@@ -31,7 +31,7 @@ export const UserProvider = ({ children }) => {
 
             await addCustomer(email);
             
-            //router.push('/shop', undefined, { shallow: true });
+            router.push('/shop', undefined, { shallow: true });
 
             toast({
                 title: 'Success',
