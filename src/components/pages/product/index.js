@@ -75,7 +75,7 @@ const ProductContent = () => {
 
                 
                
-
+                
             </Flex> 
 
             <Flex justifyContent='space-evenly' p='2em' flexWrap='wrap'>
