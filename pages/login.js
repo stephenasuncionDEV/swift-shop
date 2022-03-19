@@ -1,10 +1,8 @@
 import Head from 'next/head'
 import { Box } from '@chakra-ui/react'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
 import LoginContents from '@/components/pages/login'
 
-const Home = () => {
+const Login = () => {
     return (
         <Box>
             <Head>
@@ -15,4 +13,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default Login

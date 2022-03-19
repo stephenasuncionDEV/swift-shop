@@ -1,12 +1,11 @@
 import development from './dev';
 import production from './prod';
 
-const configs = {
+const exportedConfig = {
 	development,
 	production
 };
 
-const exportedConfig = configs[process.env.NODE_ENV];
-console.log("Loaded", process.env.NODE_ENV, "config")
+export const config = exportedConfig[process.env.NODE_ENV];
 
-export default exportedConfig;
+console.log("Loaded", process.env.NODE_ENV, "config")

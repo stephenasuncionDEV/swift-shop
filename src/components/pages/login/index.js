@@ -1,10 +1,15 @@
+import { useEffect } from 'react'
 import { Box, Flex, ScaleFade, VStack, Text, InputGroup, InputLeftElement, Input, Button, Alert, AlertIcon, Image, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react'
 import { FiMail, FiLock } from 'react-icons/fi'
 import { useUser } from '@/providers/UserProvider'
 
 const LoginContents = () => {
     const { email, setEmail, LoginAsGuest, isEmailWrong, protectLoginPage } = useUser();
-    protectLoginPage();
+    
+    useEffect(() => {
+        if (!protectLoginPage) return;
+        protectLoginPage();
+    }, [protectLoginPage])
     
     return (
         <Box>
@@ -44,7 +49,7 @@ const LoginContents = () => {
                                     </FormErrorMessage>
                                 )}
                             </FormControl>
-                            <Button w='full' onClick={LoginAsGuest}>
+                            <Button w='full' onClick={LoginAsGuest} id='login-guest-btn'>
                                 Login as guest
                             </Button>
                         </VStack>

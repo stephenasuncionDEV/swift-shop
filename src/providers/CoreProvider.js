@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext, createContext } from 'react'
 import { useToast } from '@chakra-ui/react'
 import Commerce from '@chec/commerce.js';
-import config from 'config'
+import { config } from '@/config/index'
 
-const commerce = new Commerce(config.commerce.publicKey);
+const commerce = new Commerce('pk_test_398294a9de672ab31322d419feef940b471fbaf308968');
 
 export const CoreContext = createContext({})
 export const useCore = () => useContext(CoreContext)

@@ -72,12 +72,13 @@ const LandingContents = () => {
                             ) : (
                                 <>
                                     {hotDeals?.map((deal, idx) => (
-                                        <VStack key={idx} p="10px" borderRadius="10px" maxW='275px' mb='1em'>
+                                        <VStack key={idx} p="10px" borderRadius="10px" maxW='275px' mb='1em' className='feature-container'>
                                             <Image 
                                                 mb="10px"
                                                 boxSize='275px'
                                                 objectFit='cover'
                                                 src={deal.image.url}
+                                                alt={`Feature ${idx}`}
                                                 fallbackSrc = 'https://via.placeholder.com/300'
                                             />
                                             <Text noOfLines={2}>{deal.name}</Text>
