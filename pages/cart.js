@@ -1,22 +1,20 @@
 import Head from 'next/head'
 import { Box } from '@chakra-ui/react'
 import Navbar from '@/components/Navbar'
-import ProductContent from '@/components/pages/product'
+import CartContent from '@/components/pages/cart'
 import Footer from '@/components/Footer'
 
-
-const Product = () => {
+const Cart = () => {
     return (
         <Box>
             <Head>
                 <title>Swift Shop | Home</title>
             </Head>
             <Navbar />
-            <ProductContent />
-            
+            <CartContent />      
             <Footer />
         </Box>
     )
 }
 
-export default Product
+export default Cart

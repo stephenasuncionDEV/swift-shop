@@ -1,10 +1,15 @@
-import { Box, Flex, ScaleFade, VStack, Text, InputGroup, InputLeftElement, Input, Button, Alert, AlertIcon, Image } from '@chakra-ui/react'
+import { useEffect } from 'react'
+import { Box, Flex, ScaleFade, VStack, Text, InputGroup, InputLeftElement, Input, Button, Alert, AlertIcon, Image, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react'
 import { FiMail, FiLock } from 'react-icons/fi'
 import { useUser } from '@/providers/UserProvider'
 
 const LoginContents = () => {
     const { email, setEmail, LoginAsGuest, isEmailWrong, protectLoginPage } = useUser();
-    protectLoginPage();
+    
+    useEffect(() => {
+        if (!protectLoginPage) return;
+        protectLoginPage();
+    }, [protectLoginPage])
     
     return (
         <Box>
@@ -32,26 +37,19 @@ const LoginContents = () => {
                             <Text fontSize='32pt' fontWeight='500'>
                                 Log in
                             </Text>
-                            <VStack alignItems='flex-start' w='full'>
-                                <Text fontSize='12pt'>
-                                    Email
-                                </Text>
+                            <FormControl isRequired isInvalid={isEmailWrong}>
+                                <FormLabel htmlFor='email'>Email</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement pointerEvents='none' children={<FiMail color='gray.300' />} />
-                                    <Input type='email' placeholder='you@domain.com' value={email} onChange={(e) => setEmail(e.target.value)} />
+                                    <Input id='email' type='email' placeholder='you@domain.com' value={email} onChange={(e) => setEmail(e.target.value)} />
                                 </InputGroup>
-                            </VStack>
-                            {isEmailWrong && (
-                                <VStack w='full'>
-                                    <Alert status='error' size='sm'>
-                                        <AlertIcon />
-                                        <Text fontSize='10pt'>
-                                            Invalid email address
-                                        </Text>
-                                    </Alert>
-                                </VStack>
-                            )}
-                            <Button w='full' onClick={LoginAsGuest}>
+                                {isEmailWrong && (
+                                    <FormErrorMessage>
+                                        <FormErrorMessage>Email is required.</FormErrorMessage>
+                                    </FormErrorMessage>
+                                )}
+                            </FormControl>
+                            <Button w='full' onClick={LoginAsGuest} id='login-guest-btn'>
                                 Login as guest
                             </Button>
                         </VStack>

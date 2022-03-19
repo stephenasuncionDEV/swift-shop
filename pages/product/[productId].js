@@ -1,20 +1,20 @@
 import Head from 'next/head'
 import { Box } from '@chakra-ui/react'
 import Navbar from '@/components/Navbar'
+import ProductContent from '@/components/pages/product'
 import Footer from '@/components/Footer'
-import LandingContents from '@/components/pages/landing'
 
-const Home = () => {
+const Product = () => {
     return (
         <Box>
             <Head>
-                <title>Home | Swift Shop</title>
+                <title>Swift Shop | Home</title>
             </Head>
-            <Navbar isLanding isHome={false} />
-            <LandingContents />
+            <Navbar />
+            <ProductContent />      
             <Footer />
         </Box>
     )
 }
 
-export default Home
+export default Product

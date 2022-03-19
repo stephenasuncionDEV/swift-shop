@@ -1,10 +1,12 @@
-import { Flex, Image, Text, IconButton, HStack, Link, Button } from '@chakra-ui/react'
-import { SiDiscord, SiTwitter } from 'react-icons/si'
+import { Flex, Image, Text, IconButton, HStack, Link, Button, Tag, TagRightIcon, TagLabel } from '@chakra-ui/react'
+import { FiCopy } from 'react-icons/fi'
 import NextLink from 'next/link'
 import { useUser } from '@/providers/UserProvider'
+import { useCore } from '@/providers/CoreProvider'
 
-const Navbar = () => {
-    const { isLoggedIn } = useUser();
+const Navbar = ({ isLanding = false, isHome = true }) => {
+    const { isLoggedIn, Logout, email, CopyEmail } = useUser();
+    const { cart } = useCore();
 
     return (
         <header>
@@ -33,12 +35,59 @@ const Navbar = () => {
                     </NextLink>
                     <HStack alignItems='center' spacing='1.5em'>
                         <HStack spacing='.5em'>
+                            {isLanding && (
+                                <>
+                                    <NextLink href='#hotdeals' shallow passHref>
+                                        <Button background='none'>
+                                            Hot Deals 🔥
+                                        </Button>
+                                    </NextLink>
+                                    <NextLink href='#features' shallow passHref>
+                                        <Button background='none'>
+                                            Features ✨
+                                        </Button>
+                                    </NextLink>
+                                </>
+                            )}
                             {isLoggedIn ? (
-                                <NextLink href='/shop' shallow passHref>
-                                    <Button background='none'>
-                                        Go to Shop
-                                    </Button>
-                                </NextLink>
+                                <HStack>
+                                    <HStack>
+                                        {isHome && (
+                                            <NextLink href='/' shallow passHref>
+                                                <Button background='none'>
+                                                    Home 🏠
+                                                </Button>
+                                            </NextLink>
+                                        )}
+                                        {!isLanding && (
+                                            <>
+                                            <NextLink href='/shop' shallow passHref>
+                                                <Button background='none'>
+                                                    Categories 🛍️
+                                                </Button>
+                                            </NextLink>
+                                            <NextLink href='/cart' shallow passHref>
+                                                <Button background='none'>
+                                                    My Cart &nbsp; <Tag size='sm'>{cart ? cart?.length : 0}</Tag> &nbsp;🛒
+                                                </Button>
+                                            </NextLink>
+                                            </>
+                                        )}
+                                    </HStack>
+                                    <HStack>
+                                        <Tag bg='rgba(67,122,255,0.5)' cursor='pointer' onClick={CopyEmail}>
+                                            <TagLabel>
+                                                {email}
+                                            </TagLabel>
+                                            <TagRightIcon>
+                                                <FiCopy fontSize='18pt'/>
+                                            </TagRightIcon>
+                                        </Tag>
+                                        <Button background='none' onClick={Logout}>
+                                            Logout
+                                        </Button>
+                                    </HStack>
+                                </HStack>
                             ) : (
                                 <NextLink href='/login' shallow passHref>
                                     <Button background='none'>

@@ -1,11 +1,12 @@
-import { Flex, Image, Text, IconButton, HStack, Link, Button,Box, Heading, VStack, Spinner } from '@chakra-ui/react'
-import useProducts from './hooks/useProducts'
+import { Flex, Image, Text, Button,Box, Heading, Spinner } from '@chakra-ui/react'
+import NextLink from 'next/link'
+import { useCategory } from './hooks/useCategory'
 import { useCore } from '@/providers/CoreProvider'
 import { BsFillCartPlusFill } from 'react-icons/bs'
 
-const Products = () => {
-    useProducts();
-    const { categoryProducts, categoryProductsLoading } = useCore();
+const Category = () => {
+    const { categoryProducts, categoryProductsLoading, AddToCart, isAddingCart } = useCore();
+    useCategory();
 
     return (
         <Flex mt="10px" flexWrap="wrap" px="24px" justifyContent='center'>
@@ -33,9 +34,11 @@ const Products = () => {
                                     {product.description.replaceAll('<p>', '').replaceAll('</p>', '')}
                                 </Text>
                                 <Flex mt="1em" justifyContent='flex-end'>
-                                    <Button size='sm'>View Details</Button>
-                                    <Button rightIcon={<BsFillCartPlusFill />} size='sm' ml='.5em'>Add to cart</Button>
-                                </Flex>       
+                                    <NextLink href={`/product/${product.id}`} shallow passHref>
+                                        <Button size='sm'>View Details</Button>
+                                    </NextLink>
+                                    <Button rightIcon={<BsFillCartPlusFill />} size='sm' ml='.5em' onClick={() => AddToCart(product.id)} disabled={isAddingCart}>Add to cart</Button>
+                                </Flex>
                             </Box>                  
                         ))}
                     </Flex>
@@ -53,4 +56,4 @@ const Products = () => {
     )
 }
 
-export default Products
+export default Category
