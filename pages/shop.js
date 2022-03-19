@@ -3,6 +3,8 @@ import { Box } from '@chakra-ui/react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import ShopContents from '@/components/pages/shop'
+import { useUser } from '@/providers/UserProvider'
+import { useEffect } from 'react'
 
 const Shop = () => {
     return (

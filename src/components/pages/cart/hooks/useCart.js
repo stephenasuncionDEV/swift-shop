@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useCore } from '@/providers/CoreProvider'
+import { useUser } from '@/providers/UserProvider'
 
 export const useCart = () => {
     const { getCart, cart } = useCore();
+    const { protectPage } = useUser();
     const [total, setTotal] = useState();
 
     useEffect(() => {
+        protectPage();
+
         (async () => {
             await getCart();
 		})()

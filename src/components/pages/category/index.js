@@ -5,8 +5,8 @@ import { useCore } from '@/providers/CoreProvider'
 import { BsFillCartPlusFill } from 'react-icons/bs'
 
 const Category = () => {
-    useCategory();
     const { categoryProducts, categoryProductsLoading, AddToCart, isAddingCart } = useCore();
+    useCategory();
 
     return (
         <Flex mt="10px" flexWrap="wrap" px="24px" justifyContent='center'>

@@ -59,6 +59,13 @@ export const UserProvider = ({ children }) => {
         }
     }
 
+    const protectPage = () => {
+        if (!isLoggedIn) {
+            router.push('/', undefined, { shallow: true });
+            //location.href = '/';
+        }
+    }
+
     const Logout = () => {
         localStorage.removeItem('swiftshop-email');
         localStorage.removeItem('swiftshop-token');
@@ -87,6 +94,7 @@ export const UserProvider = ({ children }) => {
         protectLoginPage,
         Logout,
         CopyEmail,
+        protectPage,
     }
 
     return (

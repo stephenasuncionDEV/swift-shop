@@ -4,7 +4,7 @@ import { FiExternalLink } from 'react-icons/fi'
 import { useShop } from './hooks/useShop'
 
 const ShopContents = () => {
-    const { categories,  } = useShop();
+    const { categories } = useShop();
 
     return ( 
         <Flex mt="10px" flexWrap="wrap" px="24px" justifyContent='center'>
