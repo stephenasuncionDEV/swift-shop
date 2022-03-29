@@ -5,7 +5,7 @@ import { Modal, ModalOverlay, ModalContent,
     InputLeftElement, VStack, HStack, Box,
     Menu, MenuButton, MenuList, MenuOptionGroup,
     MenuItemOption, MenuDivider, MenuItem, Image, MenuGroup,
-    Radio, RadioGroup, Stack
+    Radio, RadioGroup, Stack, Select
 } from '@chakra-ui/react'
 import { useUser } from '@/providers/UserProvider'
 import { useCore } from '@/providers/CoreProvider'
@@ -22,8 +22,6 @@ const PaymentModal = () => {
         checkoutItem,
         paymentName,
         setPaymentName,
-        paymentEmail,
-        setPaymentEmail,
         paymentAddress,
         setPaymentAddress,
         paymentCity,
@@ -34,9 +32,22 @@ const PaymentModal = () => {
         setPaymentZip,
         paymentCountry,
         setPaymentCountry,
-        isPaying
+        isPaying,
+        setPaymentLastName,
+        paymentLastName,
+        shippingCountries,
+        shippingCountry,
+        shippingSubdivisions,
+        shippingSubdivision,
+        shippingOptions,
+        shippingOption,
+        setShippingCountry,
+        setShippingSubdivision,
+        setShippingOption,
+        paymentEmail,
+        setPaymentEmail
     } = useCore();
-    
+
     const stripe = useStripe();
     const elements = useElements();
 
@@ -53,16 +64,19 @@ const PaymentModal = () => {
                 <ModalCloseButton />
                 <ModalBody>
                     <VStack>
-                        <FormControl isRequired>
-                            <FormLabel htmlFor='name'>Name</FormLabel>
-                            <Input id='name' type='text' placeholder='Jane Doe' value={paymentName} onChange={(e) => setPaymentName(e.target.value)} />
-                        </FormControl>
+                        <HStack>
+                            <FormControl isRequired>
+                                <FormLabel htmlFor='firstName'>First Name</FormLabel>
+                                <Input id='firstName' type='text' placeholder='Jane' value={paymentName} onChange={(e) => setPaymentName(e.target.value)} />
+                            </FormControl>
+                            <FormControl isRequired>
+                                <FormLabel htmlFor='lastName'>Last Name</FormLabel>
+                                <Input id='lastName' type='text' placeholder='Doe' value={paymentLastName} onChange={(e) => setPaymentLastName(e.target.value)} />
+                            </FormControl>
+                        </HStack>
                         <FormControl isRequired>
                             <FormLabel htmlFor='email'>Email</FormLabel>
-                            <InputGroup>
-                                <InputLeftElement pointerEvents='none' children={<FiMail color='gray.300' />} />
-                                <Input id='email' type='email' placeholder='you@domain.com' value={paymentEmail} onChange={(e) => setPaymentEmail(e.target.value)} />
-                            </InputGroup>
+                            <Input id='email' type='email' placeholder='you@mail.com' value={paymentEmail} onChange={(e) => setPaymentEmail(e.target.value)} />
                         </FormControl>
                         <FormControl isRequired>
                             <FormLabel htmlFor='address'>Address</FormLabel>
@@ -88,6 +102,40 @@ const PaymentModal = () => {
                                 <Input id='zip' type='text' placeholder='69273' value={paymentZip} onChange={(e) => setPaymentZip(e.target.value)} />
                             </FormControl>
                         </HStack>
+                        {shippingCountries && (
+                            <FormControl isRequired>
+                                <FormLabel htmlFor='shippingCountry'>Shipping Country</FormLabel>
+                                <Select placeholder='Shipping Country' value={shippingCountry} fullWidth onChange={(e) => setShippingCountry(e.target.value)}>
+                                    {Object.entries(shippingCountries).map(([code, name]) => ({ id: code, label: name })).map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.label}
+                                        </option>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        )}
+                        {shippingSubdivisions && (
+                            <FormControl isRequired>
+                                <FormLabel htmlFor='shippingSubdivision'>Shipping Subdivision</FormLabel>
+                                <Select placeholder='Shipping Subdivision' value={shippingSubdivision} fullWidth onChange={(e) => setShippingSubdivision(e.target.value)}>
+                                    {Object.entries(shippingSubdivisions).map(([code, name]) => ({ id: code, label: name })).map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.label}
+                                        </option>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        )}
+                        <FormControl isRequired>
+                            <FormLabel htmlFor='country'>Shipping Option</FormLabel>
+                            <Select placeholder='Shipping Option' value={shippingOption} fullWidth onChange={(e) => setShippingOption(e.target.value)}>
+                                {shippingOptions?.map((option) => ({ id: option.id, label: `${option.description} - (${option.price.formatted_with_symbol})` })).map((item) => (
+                                    <option key={item.id} value={item.id}>
+                                        {item.label}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </VStack>
                 </ModalBody>
                 <ModalFooter>

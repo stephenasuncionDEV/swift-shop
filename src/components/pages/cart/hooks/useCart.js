@@ -3,7 +3,7 @@ import { useCore } from '@/providers/CoreProvider'
 import { useUser } from '@/providers/UserProvider'
 
 export const useCart = () => {
-    const { getCart, cart, setPaymentData, setPaymentModalState } = useCore();
+    const { getCart, cart } = useCore();
     const { protectPage } = useUser();
     const [total, setTotal] = useState(0);
 
@@ -27,15 +27,7 @@ export const useCart = () => {
 
     }, [cart])
 
-    const onCheckout = () => {
-        setPaymentModalState(true);
-        setPaymentData({
-            price: total
-        })
-    }
-
     return {
-        total,
-        onCheckout
+        total
     }
 }

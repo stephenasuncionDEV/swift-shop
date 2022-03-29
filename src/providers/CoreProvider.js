@@ -2,6 +2,7 @@ import { useState, useEffect, useContext, createContext } from 'react'
 import { useToast } from '@chakra-ui/react'
 import Commerce from '@chec/commerce.js'
 import { config } from '@/config/index'
+import { useUser } from '@/providers/UserProvider'
 
 const commerce = new Commerce('pk_test_398294a9de672ab31322d419feef940b471fbaf308968');
 
@@ -9,6 +10,7 @@ export const CoreContext = createContext({})
 export const useCore = () => useContext(CoreContext)
 
 export const CoreProvider = ({ children }) => {
+    const { email } = useUser();
     const [products, setProducts] = useState([]);
     const [cart, setCart] = useState();
     const [hotDeals, setHotDeals] = useState();
@@ -19,14 +21,21 @@ export const CoreProvider = ({ children }) => {
     const [paymentModalState, setPaymentModalState] = useState(false);
     const [paymentData, setPaymentData] = useState();
     const [paymentName, setPaymentName] = useState('');
-    const [paymentEmail, setPaymentEmail] = useState('');
+    const [paymentLastName, setPaymentLastName] = useState('');
     const [paymentAddress, setPaymentAddress] = useState('');
     const [paymentCity, setPaymentCity] = useState('');
     const [paymentState, setPaymentState] = useState('');
     const [paymentZip, setPaymentZip] = useState('');
     const [paymentCountry, setPaymentCountry] = useState('');
+    const [paymentEmail, setPaymentEmail] = useState('');
     const [isPaying, setIsPaying] = useState(false);
-
+    const [checkoutData, setCheckoutData] = useState();
+    const [shippingCountries, setShippingCountries] = useState();
+    const [shippingCountry, setShippingCountry] = useState();
+    const [shippingSubdivisions, setShippingSubdivisions] = useState();
+    const [shippingSubdivision, setShippingSubdivision] = useState();
+    const [shippingOptions, setShippingOptions] = useState();
+    const [shippingOption, setShippingOption] = useState();
     const toast = useToast();
     
     useEffect(() => {
@@ -110,14 +119,64 @@ export const CoreProvider = ({ children }) => {
         await getCart();
     }
 
-    const getCardId = async () => {
-        const res = await commerce.cart.id();
+    const getCardId = () => {
+        const res = commerce.cart.id();
         return res;
+    }
+
+    const getShippingCountries = async (checkoutTokenId) => {
+        const { countries } = await commerce.services.localeListShippingCountries(checkoutTokenId);
+        setShippingCountries(countries);
+        setShippingCountry(Object.keys(countries)[0]);
+        return Object.keys(countries)[0];
+    }
+
+    const getSubdivisions = async (countryCode) => {
+        const { subdivisions } = await commerce.services.localeListSubdivisions(countryCode);
+        setShippingSubdivisions(subdivisions);
+        setShippingSubdivision(Object.keys(subdivisions)[0]);
+        return Object.keys(subdivisions)[0];
+    }
+    
+    const getShippingOptions = async (checkoutTokenId, country, stateProvince = null) => {
+        const options = await commerce.checkout.getShippingOptions(checkoutTokenId, { country, region: stateProvince });
+        setShippingOptions(options);
+        setShippingOption(options[0].id);
+    }
+
+    const onCheckout = async (total) => {
+        try {
+            const checkoutDataRes = await commerce.checkout.generateToken(getCardId(), { type: 'cart' });
+            setCheckoutData(checkoutDataRes);
+
+            const country = await getShippingCountries(checkoutDataRes.id);
+            const division = await getSubdivisions(country);
+            await getShippingOptions(checkoutDataRes.id, country, division);
+
+            setPaymentModalState(true);
+            setPaymentData({
+                price: total
+            })
+        }
+        catch (err) {
+            toast({
+                title: 'Error',
+                description: err.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
     const checkoutItem = async (stripe, elements, CardElement) => {
         try {
             if (!stripe || !elements) return;
+
+            const fieldsLength = [paymentName.length, paymentAddress.length, paymentCity.length, paymentState.length, paymentZip.length, paymentCountry.length, paymentEmail.length];
+            fieldsLength.forEach((field) => {
+                if (field === 0) throw new Error("Please fill in all the required fields");
+            })
 
             const cardElement = elements.getElement(CardElement);
     
@@ -126,10 +185,23 @@ export const CoreProvider = ({ children }) => {
             if (error) throw new Error(error.message);
 
             const orderData = {
-                line_items: checkoutToken.live.line_items,
-                customer: { firstname: shippingData.firstName, lastname: shippingData.lastName, email: shippingData.email },
-                shipping: { name: 'International', street: shippingData.address1, town_city: shippingData.city, county_state: shippingData.shippingSubdivision, postal_zip_code: shippingData.zip, country: shippingData.shippingCountry },
-                fulfillment: { shipping_method: shippingData.shippingOption },
+                line_items: checkoutData.live.line_items,
+                customer: { 
+                    firstname: paymentName, 
+                    lastname: paymentLastName, 
+                    email: paymentEmail
+                },
+                shipping: { 
+                    name: 'International', 
+                    street: paymentAddress, 
+                    town_city: paymentCity, 
+                    county_state: shippingSubdivision, 
+                    postal_zip_code: paymentZip, 
+                    country: shippingCountry 
+                },
+                fulfillment: { 
+                    shipping_method: shippingOption 
+                },
                 payment: {
                     gateway: 'stripe',
                     stripe: {
@@ -138,6 +210,8 @@ export const CoreProvider = ({ children }) => {
                 },
             };
 
+            const res = await commerce.checkout.capture(checkoutData.id, orderData);
+            console.log(res)
         }
         catch (err) {
             toast({
@@ -173,8 +247,6 @@ export const CoreProvider = ({ children }) => {
         checkoutItem,
         paymentName,
         setPaymentName,
-        paymentEmail,
-        setPaymentEmail,
         paymentAddress,
         setPaymentAddress,
         paymentCity,
@@ -186,7 +258,22 @@ export const CoreProvider = ({ children }) => {
         paymentCountry,
         setPaymentCountry,
         isPaying,
-        setIsPaying
+        setIsPaying,
+        setPaymentLastName,
+        paymentLastName,
+        checkoutData,
+        shippingCountries,
+        shippingCountry,
+        setShippingCountry,
+        shippingSubdivisions,
+        shippingSubdivision,
+        setShippingSubdivision,
+        shippingOptions,
+        shippingOption,
+        setShippingOption,
+        onCheckout,
+        paymentEmail,
+        setPaymentEmail
     }
 
     return (

@@ -12,8 +12,8 @@ import { Elements } from '@stripe/react-stripe-js'
 const stripePromise = loadStripe(config.stripe.publicKey);
 
 const CartContent = () => {
-    const { cart, removeItemCart } = useCore();
-    const { total, onCheckout } = useCart();
+    const { cart, removeItemCart, onCheckout } = useCore();
+    const { total } = useCart();
 
     return (
         <Flex mt="10px" justifyContent="center" wrap="wrap">
@@ -83,7 +83,7 @@ const CartContent = () => {
                                 Product Total : ${total}
                             </Text>
                             <Flex w='full' justifyContent='flex-end'>
-                                <Button rightIcon={<BiPurchaseTag />} onClick={onCheckout} bg='yellow.600'>
+                                <Button rightIcon={<BiPurchaseTag />} onClick={() => onCheckout(total)} bg='yellow.600'>
                                     Checkout
                                 </Button>
                             </Flex>
