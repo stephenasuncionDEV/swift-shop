@@ -324,6 +324,10 @@ export const CoreProvider = ({ children }) => {
         }
     }
 
+    const customerLogout = async () => {
+        await commerce.customer.logout();
+    }
+
     const controllers = {
         products,
         hotDeals,
@@ -388,7 +392,8 @@ export const CoreProvider = ({ children }) => {
         setPaymentDiscount,
         chargeId,
         setChargeId,
-        refund
+        refund,
+        customerLogout
     }
 
     return (

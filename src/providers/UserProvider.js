@@ -7,7 +7,7 @@ export const UserContext = createContext({})
 export const useUser = () => useContext(UserContext)
 
 export const UserProvider = ({ children }) => {
-    const { addCustomer } = useCore();
+    const { addCustomer, customerLogout } = useCore();
     const [email, setEmail] = useState('');
     const [isEmailWrong, setIsEmailWrong] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -79,11 +79,16 @@ export const UserProvider = ({ children }) => {
     }
 
     const Logout = async () => {
-        await commerce.customer.logout();
-        localStorage.removeItem('swiftshop-email');
-        localStorage.removeItem('swiftshop-token');
-        setIsLoggedIn(false);
-        router.push('/', undefined, { shallow: true });
+        try {
+            await customerLogout();
+            localStorage.removeItem('swiftshop-email');
+            localStorage.removeItem('swiftshop-token');
+            setIsLoggedIn(false);
+            router.push('/', undefined, { shallow: true });
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
 
     const CopyEmail = () => {
