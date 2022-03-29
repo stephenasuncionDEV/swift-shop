@@ -3,6 +3,7 @@ import { useToast } from '@chakra-ui/react'
 import Commerce from '@chec/commerce.js'
 import { config } from '@/config/index'
 import { useUser } from '@/providers/UserProvider'
+import { useRouter } from 'next/router'
 
 const commerce = new Commerce('pk_test_398294a9de672ab31322d419feef940b471fbaf308968');
 
@@ -36,8 +37,10 @@ export const CoreProvider = ({ children }) => {
     const [shippingSubdivision, setShippingSubdivision] = useState();
     const [shippingOptions, setShippingOptions] = useState();
     const [shippingOption, setShippingOption] = useState();
+    const [isCheckingOut, setIsCheckingOut] = useState(false);
     const toast = useToast();
-    
+    const router = useRouter();
+
     useEffect(() => {
         const getProducts = async () => {
             // Get all products
@@ -146,6 +149,10 @@ export const CoreProvider = ({ children }) => {
 
     const onCheckout = async (total) => {
         try {
+            if (!cart.length) throw new Error("You must add item(s) to your cart");
+
+            setIsCheckingOut(true);
+
             const checkoutDataRes = await commerce.checkout.generateToken(getCardId(), { type: 'cart' });
             setCheckoutData(checkoutDataRes);
 
@@ -157,8 +164,12 @@ export const CoreProvider = ({ children }) => {
             setPaymentData({
                 price: total
             })
+
+            setIsCheckingOut(false);
         }
         catch (err) {
+            setIsCheckingOut(false);
+
             toast({
                 title: 'Error',
                 description: err.message,
@@ -211,7 +222,8 @@ export const CoreProvider = ({ children }) => {
             };
 
             const res = await commerce.checkout.capture(checkoutData.id, orderData);
-            console.log(res)
+            
+            router.push('/success', undefined, { shallow: true });
         }
         catch (err) {
             toast({
@@ -222,6 +234,10 @@ export const CoreProvider = ({ children }) => {
                 isClosable: true,
             })
         }
+    }
+
+    const goBackToCategories = () => {
+        router.push('/shop', undefined, { shallow: true });
     }
 
     const controllers = {
@@ -273,7 +289,10 @@ export const CoreProvider = ({ children }) => {
         setShippingOption,
         onCheckout,
         paymentEmail,
-        setPaymentEmail
+        setPaymentEmail,
+        isCheckingOut,
+        setIsCheckingOut,
+        goBackToCategories
     }
 
     return (
