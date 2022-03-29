@@ -78,7 +78,8 @@ export const UserProvider = ({ children }) => {
         }
     }
 
-    const Logout = () => {
+    const Logout = async () => {
+        await commerce.customer.logout();
         localStorage.removeItem('swiftshop-email');
         localStorage.removeItem('swiftshop-token');
         setIsLoggedIn(false);

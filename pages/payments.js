@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { useEffect } from 'react'
-import { Box, Flex, Text, VStack, HStack, Button, Heading, Wrap, WrapItem } from '@chakra-ui/react'
+import { Box, Flex, Text, VStack, HStack, Button, Heading, Wrap, WrapItem, Tag } from '@chakra-ui/react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { useCore } from '@/providers/CoreProvider'
@@ -23,7 +23,7 @@ const Payments = () => {
                 <title>Payments | Home</title>
             </Head>
             <Navbar />
-                <Flex h='500px' mt='4em' justifyContent='center'>
+                <Flex my='4em' justifyContent='center'>
                     <Flex maxW='8xl' w='full' px='24px' justifyContent='flex-start'>
                         <Flex flexDir='column' w='full'> 
                             <Heading textAlign='left'>My Orders</Heading>
@@ -32,16 +32,16 @@ const Payments = () => {
                                     <WrapItem key={idx} w='full' p='1em' bg='rgb(47,77,150)'>
                                         <VStack alignItems='flex-start'>
                                             <Text>
-                                                Order ID: {order.id}
+                                                Order ID: <Tag>{order.id}</Tag>
                                             </Text>
                                             <Text>
-                                                Amount: ${order.order.total_with_tax.formatted}
+                                                Amount: <Tag>${order.order.total_with_tax.formatted}</Tag>
                                             </Text>
                                             <Text>
-                                                Order Status: {order.status}
+                                                Order Status: <Tag>{order.status}</Tag>
                                             </Text>
                                             <Text>
-                                                Payment Status: {order.status_payment}
+                                                Payment Status: <Tag>{order.status_payment}</Tag>
                                             </Text>
                                         </VStack>
                                     </WrapItem>

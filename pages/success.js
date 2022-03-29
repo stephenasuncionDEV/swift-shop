@@ -40,7 +40,7 @@ const Success = () => {
                                     Checkout ID: <Tag>{checkoutData?.id}</Tag>
                                 </Text>
                                 <Text mt='.5em'>
-                                    Invoice ID: <Tag>{paymentMethodId}</Tag>
+                                    Payment Method ID: <Tag>{paymentMethodId}</Tag>
                                 </Text>
                                 <Text mt='.5em'>
                                     Total Amount Paid: <Tag> ${paymentData?.price}</Tag>

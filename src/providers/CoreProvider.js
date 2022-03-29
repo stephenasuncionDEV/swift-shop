@@ -216,6 +216,7 @@ export const CoreProvider = ({ children }) => {
                         payment_method_id: paymentMethod.id,
                     },
                 },
+                pay_what_you_want: '1.00'
             };
 
             setPaymentMethodId(paymentMethod.id);
@@ -247,6 +248,7 @@ export const CoreProvider = ({ children }) => {
 
     const onPayments = () => {
         try {
+            if (!JSON.parse(localStorage.getItem('swiftshop-user'))) throw new Error('You must order something first, to access payments page.')
             if (!commerce.customer.isLoggedIn()) throw new Error('Token expired, please relogin.')
 
             router.push('/payments', undefined, { shallow: true });
