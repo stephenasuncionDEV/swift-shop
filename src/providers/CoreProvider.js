@@ -128,7 +128,6 @@ export const CoreProvider = ({ children }) => {
         const { countries } = await commerce.services.localeListShippingCountries(checkoutTokenId);
         setShippingCountries(countries);
         setShippingCountry(Object.keys(countries)[0]);
-        return Object.keys(countries)[0];
     }
 
     const getSubdivisions = async (countryCode) => {
@@ -150,12 +149,14 @@ export const CoreProvider = ({ children }) => {
 
             setIsCheckingOut(true);
 
-            const checkoutDataRes = await commerce.checkout.generateToken(getCardId(), { type: 'cart' });
+            const cartId = getCardId();
+        
+            const checkoutDataRes = await commerce.checkout.generateToken(cartId, { type: 'cart' });
             setCheckoutData(checkoutDataRes);
 
-            const country = await getShippingCountries(checkoutDataRes.id);
-            const division = await getSubdivisions(country);
-            await getShippingOptions(checkoutDataRes.id, country, division);
+            await getShippingCountries(checkoutDataRes.id);
+            const division = await getSubdivisions('CA');
+            await getShippingOptions(checkoutDataRes.id, 'CA', division);
 
             setPaymentModalState(true);
             setPaymentData({
@@ -166,7 +167,7 @@ export const CoreProvider = ({ children }) => {
         }
         catch (err) {
             setIsCheckingOut(false);
-
+            console.log(err)
             toast({
                 title: 'Error',
                 description: err.message,
@@ -185,6 +186,10 @@ export const CoreProvider = ({ children }) => {
             fieldsLength.forEach((field) => {
                 if (field === 0) throw new Error("Please fill in all the required fields");
             })
+
+            // await commerce.checkout.checkDiscount(checkoutData.id, {
+            //     code: 'ABC123ZYX',
+            // });
 
             const cardElement = elements.getElement(CardElement);
     
