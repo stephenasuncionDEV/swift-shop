@@ -13,7 +13,8 @@ const Success = () => {
         checkoutData,
         goBackToCategories,
         paymentMethodId,
-        paymentData
+        paymentData,
+        paymentDiscount
     }
     = useCore();
 
@@ -44,7 +45,17 @@ const Success = () => {
                                 </Text>
                                 <Text mt='.5em'>
                                     Total Amount Paid: <Tag> ${paymentData?.price}</Tag>
+                                    {paymentDiscount?.length > 0 && (
+                                        <>
+                                            - <Tag bg='green'>$10 Discount</Tag>
+                                        </>
+                                    )}
                                 </Text>
+                                {paymentDiscount?.length > 0 && (
+                                    <Text mt='.5em'>
+                                        Discount Code: <Tag>{paymentDiscount}</Tag>
+                                    </Text>
+                                )}
                                 <Button mt='3em' onClick={goBackToCategories} rightIcon={<BiArrowBack />} size='lg'>
                                     Go Back To Categories
                                 </Button>

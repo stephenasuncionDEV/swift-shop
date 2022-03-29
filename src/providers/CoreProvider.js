@@ -4,6 +4,7 @@ import Commerce from '@chec/commerce.js'
 import { config } from '@/config/index'
 import { useUser } from '@/providers/UserProvider'
 import { useRouter } from 'next/router'
+import axios from 'axios'
 
 const commerce = new Commerce('pk_test_398294a9de672ab31322d419feef940b471fbaf308968');
 
@@ -39,6 +40,8 @@ export const CoreProvider = ({ children }) => {
     const [shippingOption, setShippingOption] = useState();
     const [isCheckingOut, setIsCheckingOut] = useState(false);
     const [paymentMethodId, setPaymentMethodId] = useState();
+    const [paymentDiscount, setPaymentDiscount] = useState('');
+    const [chargeId, setChargeId] = useState('');
     const [orders, setOrders] = useState();
     const toast = useToast();
     const router = useRouter();
@@ -128,7 +131,6 @@ export const CoreProvider = ({ children }) => {
         const { countries } = await commerce.services.localeListShippingCountries(checkoutTokenId);
         setShippingCountries(countries);
         setShippingCountry(Object.keys(countries)[0]);
-        return Object.keys(countries)[0];
     }
 
     const getSubdivisions = async (countryCode) => {
@@ -150,12 +152,14 @@ export const CoreProvider = ({ children }) => {
 
             setIsCheckingOut(true);
 
-            const checkoutDataRes = await commerce.checkout.generateToken(getCardId(), { type: 'cart' });
+            const cartId = getCardId();
+        
+            const checkoutDataRes = await commerce.checkout.generateToken(cartId, { type: 'cart' });
             setCheckoutData(checkoutDataRes);
 
-            const country = await getShippingCountries(checkoutDataRes.id);
-            const division = await getSubdivisions(country);
-            await getShippingOptions(checkoutDataRes.id, country, division);
+            await getShippingCountries(checkoutDataRes.id);
+            const division = await getSubdivisions('CA');
+            await getShippingOptions(checkoutDataRes.id, 'CA', division);
 
             setPaymentModalState(true);
             setPaymentData({
@@ -166,7 +170,7 @@ export const CoreProvider = ({ children }) => {
         }
         catch (err) {
             setIsCheckingOut(false);
-
+            console.log(err)
             toast({
                 title: 'Error',
                 description: err.message,
@@ -185,6 +189,23 @@ export const CoreProvider = ({ children }) => {
             fieldsLength.forEach((field) => {
                 if (field === 0) throw new Error("Please fill in all the required fields");
             })
+
+            if (paymentDiscount.length > 0) {
+                const res = await axios.get(`${config.serverUrl}/api/payment/getCoupons`);
+                const isValid = res.data.filter(codes => codes.id == paymentDiscount).length > 0;
+
+                if (isValid) {
+                    await commerce.checkout.checkDiscount(checkoutData.id, {
+                        code: paymentDiscount,
+                    });
+                }
+                else {
+                    setPaymentDiscount('');
+                    throw new Error("Invalid Discount Code");
+                }
+            }
+
+            setIsPaying(true);
 
             const cardElement = elements.getElement(CardElement);
     
@@ -215,23 +236,23 @@ export const CoreProvider = ({ children }) => {
                     stripe: {
                         payment_method_id: paymentMethod.id,
                     },
-                },
-                pay_what_you_want: '1.00'
+                }
             };
 
             setPaymentMethodId(paymentMethod.id);
 
             const res = await commerce.checkout.capture(checkoutData.id, orderData);
             
-            console.log(res)
-
             localStorage.setItem('swiftshop-user', 'true');
+
+            setIsPaying(false);
 
             router.push('/success', undefined, { shallow: true });
 
-            emptyCart();
+            //emptyCart();
         }
         catch (err) {
+            setIsPaying(false);
             toast({
                 title: 'Error',
                 description: err.message,
@@ -268,11 +289,39 @@ export const CoreProvider = ({ children }) => {
         const customerId = commerce.customer.id();
         const orders = await commerce.customer.getOrders(customerId);
         setOrders(orders.data);
-        console.log(orders.data)
     }
 
     const getAccessToken = async (token) => {
         await commerce.customer.getToken(token);
+    }
+
+    const refund = async () => {
+        try {
+            if (!chargeId.length) throw new Error('You must input a charge ID');
+            if (chargeId.substring(0, 3) !== 'ch_') throw new Error('Invalid charge ID');
+
+            const res = await axios.post(`${config.serverUrl}/api/payment/refund`, {
+                chargeId
+            })
+    
+            setChargeId('');
+            toast({
+                title: 'Success',
+                description: 'Successfully created a refund',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
+        catch (err) {
+            toast({
+                title: 'Error',
+                description: err.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
     const controllers = {
@@ -334,7 +383,12 @@ export const CoreProvider = ({ children }) => {
         getAccessToken,
         getOrders,
         orders,
-        paymentMethodId
+        paymentMethodId,
+        paymentDiscount,
+        setPaymentDiscount,
+        chargeId,
+        setChargeId,
+        refund
     }
 
     return (

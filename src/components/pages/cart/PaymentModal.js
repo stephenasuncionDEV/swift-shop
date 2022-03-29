@@ -1,18 +1,13 @@
 import { Modal, ModalOverlay, ModalContent, 
     ModalHeader, ModalFooter, ModalBody,
     ModalCloseButton, Button, Text, Input,
-    FormControl, FormLabel, InputGroup, 
-    InputLeftElement, VStack, HStack, Box,
-    Menu, MenuButton, MenuList, MenuOptionGroup,
-    MenuItemOption, MenuDivider, MenuItem, Image, MenuGroup,
-    Radio, RadioGroup, Stack, Select
+    FormControl, FormLabel, VStack, HStack, 
+    Box, Menu, MenuButton, MenuList,
+    MenuItem, Image, MenuGroup, Select
 } from '@chakra-ui/react'
-import { useUser } from '@/providers/UserProvider'
 import { useCore } from '@/providers/CoreProvider'
-import { FiMail } from 'react-icons/fi'
 import { FaChevronDown } from 'react-icons/fa'
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
-import { useCart } from './hooks/useCart'
 
 const PaymentModal = () => {
     const { 
@@ -45,7 +40,9 @@ const PaymentModal = () => {
         setShippingSubdivision,
         setShippingOption,
         paymentEmail,
-        setPaymentEmail
+        setPaymentEmail,
+        paymentDiscount,
+        setPaymentDiscount
     } = useCore();
 
     const stripe = useStripe();
@@ -102,40 +99,48 @@ const PaymentModal = () => {
                                 <Input id='zip' type='text' placeholder='69273' value={paymentZip} onChange={(e) => setPaymentZip(e.target.value)} />
                             </FormControl>
                         </HStack>
-                        {shippingCountries && (
-                            <FormControl isRequired>
-                                <FormLabel htmlFor='shippingCountry'>Shipping Country</FormLabel>
-                                <Select placeholder='Shipping Country' value={shippingCountry} w='full' onChange={(e) => setShippingCountry(e.target.value)}>
-                                    {Object.entries(shippingCountries).map(([code, name]) => ({ id: code, label: name })).map((item) => (
+                        <HStack w='full'>
+                            {shippingCountries && (
+                                <FormControl isRequired>
+                                    <FormLabel htmlFor='shippingCountry'>Shipping Country</FormLabel>
+                                    <Select placeholder='Shipping Country' value={shippingCountry} w='full' onChange={(e) => setShippingCountry(e.target.value)}>
+                                        {Object.entries(shippingCountries).map(([code, name]) => ({ id: code, label: name })).map((item) => (
+                                            <option key={item.id} value={item.id}>
+                                                {item.label}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            )}
+                            {shippingSubdivisions && (
+                                <FormControl isRequired>
+                                    <FormLabel htmlFor='shippingSubdivision'>Shipping Province</FormLabel>
+                                    <Select placeholder='Shipping Subdivision' value={shippingSubdivision} w='full' onChange={(e) => setShippingSubdivision(e.target.value)}>
+                                        {Object.entries(shippingSubdivisions).map(([code, name]) => ({ id: code, label: name })).map((item) => (
+                                            <option key={item.id} value={item.id}>
+                                                {item.label}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            )}
+                        </HStack>
+                        <HStack w='full'>
+                            <FormControl>
+                                <FormLabel htmlFor='country'>Shipping Option</FormLabel>
+                                <Select placeholder='Shipping Option' value={shippingOption} w='full' onChange={(e) => setShippingOption(e.target.value)}>
+                                    {shippingOptions?.map((option) => ({ id: option.id, label: `${option.description} - (${option.price.formatted_with_symbol})` })).map((item) => (
                                         <option key={item.id} value={item.id}>
                                             {item.label}
                                         </option>
                                     ))}
                                 </Select>
                             </FormControl>
-                        )}
-                        {shippingSubdivisions && (
-                            <FormControl isRequired>
-                                <FormLabel htmlFor='shippingSubdivision'>Shipping Subdivision</FormLabel>
-                                <Select placeholder='Shipping Subdivision' value={shippingSubdivision} w='full' onChange={(e) => setShippingSubdivision(e.target.value)}>
-                                    {Object.entries(shippingSubdivisions).map(([code, name]) => ({ id: code, label: name })).map((item) => (
-                                        <option key={item.id} value={item.id}>
-                                            {item.label}
-                                        </option>
-                                    ))}
-                                </Select>
+                            <FormControl>
+                                <FormLabel htmlFor='discount'>Discount Code</FormLabel>
+                                <Input id='discount' type='text' placeholder='Code' value={paymentDiscount} onChange={(e) => setPaymentDiscount(e.target.value)} />
                             </FormControl>
-                        )}
-                        <FormControl isRequired>
-                            <FormLabel htmlFor='country'>Shipping Option</FormLabel>
-                            <Select placeholder='Shipping Option' value={shippingOption} w='full' onChange={(e) => setShippingOption(e.target.value)}>
-                                {shippingOptions?.map((option) => ({ id: option.id, label: `${option.description} - (${option.price.formatted_with_symbol})` })).map((item) => (
-                                    <option key={item.id} value={item.id}>
-                                        {item.label}
-                                    </option>
-                                ))}
-                            </Select>
-                        </FormControl>
+                        </HStack>
                     </VStack>
                 </ModalBody>
                 <ModalFooter>
