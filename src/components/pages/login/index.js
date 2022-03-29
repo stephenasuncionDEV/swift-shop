@@ -1,15 +1,37 @@
 import { useEffect } from 'react'
-import { Box, Flex, ScaleFade, VStack, Text, InputGroup, InputLeftElement, Input, Button, Alert, AlertIcon, Image, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react'
-import { FiMail, FiLock } from 'react-icons/fi'
+import { useToast, Box, Flex, ScaleFade, VStack, Text, InputGroup, InputLeftElement, Input, Button, Alert, AlertIcon, Image, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react'
+import { FiMail } from 'react-icons/fi'
 import { useUser } from '@/providers/UserProvider'
+import { useRouter } from 'next/router'
+import { useCore } from '@/providers/CoreProvider'
 
 const LoginContents = () => {
-    const { email, setEmail, LoginAsGuest, isEmailWrong, protectLoginPage } = useUser();
-    
+    const { setToken, getAccessToken } = useCore();
+    const { email, setEmail, LoginAsGuest, isEmailWrong, protectLoginPage, isCustomer, setIsLoggedIn } = useUser();
+    const router = useRouter();
+    const { token } = router.query;
+    const toast = useToast();
+
     useEffect(() => {
         if (!protectLoginPage) return;
         protectLoginPage();
     }, [protectLoginPage])
+
+    useEffect(() => {
+        if (!token) return;
+        const parsedToken = token.substring(1);
+        setToken(parsedToken);
+        setIsLoggedIn(true);
+        setEmail(localStorage.getItem('swiftshop-email'));
+        getAccessToken(parsedToken);
+        toast({
+            title: 'Success',
+            description: `Successfully logged with token ${parsedToken}`,
+            status: 'success',
+            duration: 3000,
+            isClosable: true,
+        })
+    }, [token])
     
     return (
         <Box>
@@ -37,6 +59,12 @@ const LoginContents = () => {
                             <Text fontSize='32pt' fontWeight='500'>
                                 Log in
                             </Text>
+                            {isCustomer && (
+                                <Alert status='info'>
+                                    <AlertIcon />
+                                    Customer Detected, please check your email to login.
+                                </Alert>
+                            )}
                             <FormControl isRequired isInvalid={isEmailWrong}>
                                 <FormLabel htmlFor='email'>Email</FormLabel>
                                 <InputGroup>

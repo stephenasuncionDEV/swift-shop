@@ -105,7 +105,7 @@ const PaymentModal = () => {
                         {shippingCountries && (
                             <FormControl isRequired>
                                 <FormLabel htmlFor='shippingCountry'>Shipping Country</FormLabel>
-                                <Select placeholder='Shipping Country' value={shippingCountry} fullWidth onChange={(e) => setShippingCountry(e.target.value)}>
+                                <Select placeholder='Shipping Country' value={shippingCountry} w='full' onChange={(e) => setShippingCountry(e.target.value)}>
                                     {Object.entries(shippingCountries).map(([code, name]) => ({ id: code, label: name })).map((item) => (
                                         <option key={item.id} value={item.id}>
                                             {item.label}
@@ -117,7 +117,7 @@ const PaymentModal = () => {
                         {shippingSubdivisions && (
                             <FormControl isRequired>
                                 <FormLabel htmlFor='shippingSubdivision'>Shipping Subdivision</FormLabel>
-                                <Select placeholder='Shipping Subdivision' value={shippingSubdivision} fullWidth onChange={(e) => setShippingSubdivision(e.target.value)}>
+                                <Select placeholder='Shipping Subdivision' value={shippingSubdivision} w='full' onChange={(e) => setShippingSubdivision(e.target.value)}>
                                     {Object.entries(shippingSubdivisions).map(([code, name]) => ({ id: code, label: name })).map((item) => (
                                         <option key={item.id} value={item.id}>
                                             {item.label}
@@ -128,7 +128,7 @@ const PaymentModal = () => {
                         )}
                         <FormControl isRequired>
                             <FormLabel htmlFor='country'>Shipping Option</FormLabel>
-                            <Select placeholder='Shipping Option' value={shippingOption} fullWidth onChange={(e) => setShippingOption(e.target.value)}>
+                            <Select placeholder='Shipping Option' value={shippingOption} w='full' onChange={(e) => setShippingOption(e.target.value)}>
                                 {shippingOptions?.map((option) => ({ id: option.id, label: `${option.description} - (${option.price.formatted_with_symbol})` })).map((item) => (
                                     <option key={item.id} value={item.id}>
                                         {item.label}
