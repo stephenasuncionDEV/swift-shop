@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Flex, Image, Text, Button,Box, Heading, Spinner, VStack, HStack, InputGroup, InputLeftElement, Input } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { useCategory } from './hooks/useCategory'

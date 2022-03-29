@@ -16,6 +16,7 @@ export const CoreProvider = ({ children }) => {
     const [categoryProductsLoading, setCategoryProductsLoading] = useState(false);
     const [token, setToken] = useState();
     const [isAddingCart, setIsAddingCart] = useState(false);
+    const [paymentModalState, setPaymentModalState] = useState(false);
     const toast = useToast();
     
     useEffect(() => {
@@ -120,6 +121,8 @@ export const CoreProvider = ({ children }) => {
         getCardId,
         cart,
         isAddingCart,
+        paymentModalState,
+        setPaymentModalState,
     }
 
     return (

@@ -4,13 +4,22 @@ import { BsTrashFill } from 'react-icons/bs'
 import { BiPurchaseTag } from 'react-icons/bi'
 import { useCore } from '@/providers/CoreProvider'
 import { useCart } from './hooks/useCart'
+import PaymentModal from './PaymentModal'
+import { config } from '@/config/index'
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
+
+const stripePromise = loadStripe(config.stripe.publicKey);
 
 const CartContent = () => {
     const { cart, removeItemCart } = useCore();
-    const { total } = useCart();
+    const { total, onCheckout } = useCart();
 
     return (
         <Flex mt="10px" justifyContent="center" wrap="wrap">
+            <Elements stripe={stripePromise}>
+                <PaymentModal />
+            </Elements>
             <Flex maxW='8xl' w='full' flexDir='column' px="24px">
                 <Text fontSize="5xl" fontWeight="extrabold" color='rgb(67,122,255)'>
                     Your Cart
@@ -74,7 +83,7 @@ const CartContent = () => {
                                 Product Total : ${total}
                             </Text>
                             <Flex w='full' justifyContent='flex-end'>
-                                <Button rightIcon={<BiPurchaseTag />} bg='yellow.600'>
+                                <Button rightIcon={<BiPurchaseTag />} onClick={onCheckout} bg='yellow.600'>
                                     Checkout
                                 </Button>
                             </Flex>
