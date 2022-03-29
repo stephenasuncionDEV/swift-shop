@@ -38,6 +38,8 @@ export const CoreProvider = ({ children }) => {
     const [shippingOptions, setShippingOptions] = useState();
     const [shippingOption, setShippingOption] = useState();
     const [isCheckingOut, setIsCheckingOut] = useState(false);
+    const [paymentMethodId, setPaymentMethodId] = useState();
+    const [orders, setOrders] = useState();
     const toast = useToast();
     const router = useRouter();
 
@@ -99,12 +101,7 @@ export const CoreProvider = ({ children }) => {
     }
 
     const addCustomer = async (email) => {
-        const token = await commerce.customer.login(email, 'http://localhost:3000/shop');
-        //console.log('token', token);
-
-        //localStorage.setItem('swiftshop-token', token);
-
-        //setToken(token);
+        await commerce.customer.login(email, `http://localhost:3000/login?token=`);
     }
 
     const getCart = async () => {
@@ -221,9 +218,17 @@ export const CoreProvider = ({ children }) => {
                 },
             };
 
+            setPaymentMethodId(paymentMethod.id);
+
             const res = await commerce.checkout.capture(checkoutData.id, orderData);
             
+            console.log(res)
+
+            localStorage.setItem('swiftshop-user', 'true');
+
             router.push('/success', undefined, { shallow: true });
+
+            emptyCart();
         }
         catch (err) {
             toast({
@@ -238,6 +243,34 @@ export const CoreProvider = ({ children }) => {
 
     const goBackToCategories = () => {
         router.push('/shop', undefined, { shallow: true });
+    }
+
+    const onPayments = () => {
+        try {
+            if (!commerce.customer.isLoggedIn()) throw new Error('Token expired, please relogin.')
+
+            router.push('/payments', undefined, { shallow: true });
+        }
+        catch (err) {
+            toast({
+                title: 'Error',
+                description: err.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
+    }
+
+    const getOrders = async () => {
+        const customerId = commerce.customer.id();
+        const orders = await commerce.customer.getOrders(customerId);
+        setOrders(orders.data);
+        console.log(orders.data)
+    }
+
+    const getAccessToken = async (token) => {
+        await commerce.customer.getToken(token);
     }
 
     const controllers = {
@@ -292,7 +325,14 @@ export const CoreProvider = ({ children }) => {
         setPaymentEmail,
         isCheckingOut,
         setIsCheckingOut,
-        goBackToCategories
+        goBackToCategories,
+        token,
+        setToken,
+        onPayments,
+        getAccessToken,
+        getOrders,
+        orders,
+        paymentMethodId
     }
 
     return (

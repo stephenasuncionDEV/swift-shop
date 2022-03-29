@@ -7,7 +7,7 @@ import { FaChevronDown } from 'react-icons/fa'
 
 const Navbar = ({ isLanding = false, isHome = true }) => {
     const { isLoggedIn, Logout, email, CopyEmail } = useUser();
-    const { cart } = useCore();
+    const { cart, onPayments } = useCore();
 
     return (
         <header>
@@ -89,10 +89,8 @@ const Navbar = ({ isLanding = false, isHome = true }) => {
                                                 My User
                                             </MenuButton>
                                             <MenuList>
-                                                <MenuItem>
-                                                    <NextLink href='/payments' shallow passHref>
-                                                        Payments 💵
-                                                    </NextLink>
+                                                <MenuItem onClick={onPayments}>
+                                                    Payments 💵
                                                 </MenuItem>
                                                 <MenuItem onClick={Logout}>
                                                     Logout ✌️

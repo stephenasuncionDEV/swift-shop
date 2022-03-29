@@ -11,6 +11,7 @@ export const UserProvider = ({ children }) => {
     const [email, setEmail] = useState('');
     const [isEmailWrong, setIsEmailWrong] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isCustomer, setIsCustomer] = useState(false);
     const toast = useToast();
     const router = useRouter();
 
@@ -26,20 +27,31 @@ export const UserProvider = ({ children }) => {
             if (!email.length) throw new Error('Must enter an email address');
             if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) throw new Error('Invalid email address');
 
-            localStorage.setItem('swiftshop-email', email);
-            setIsLoggedIn(true);
-
-            await addCustomer(email);
+            const isUser = JSON.parse(localStorage.getItem('swiftshop-user'));
             
-            router.push('/shop', undefined, { shallow: true });
+            localStorage.setItem('swiftshop-email', email);
 
-            toast({
-                title: 'Success',
-                description: `Successfully logged in as ${email}`,
-                status: 'success',
-                duration: 3000,
-                isClosable: true,
-            })
+            if (isUser) {
+                await addCustomer(email);
+                setIsCustomer(true);
+                setEmail(email);
+            }
+            else {
+                setIsCustomer(false);
+                setEmail(email);
+                localStorage.setItem('swiftshop-user', 'false');
+                setIsLoggedIn(true);
+
+                router.push('/shop', undefined, { shallow: true });
+
+                toast({
+                    title: 'Success',
+                    description: `Successfully logged in as ${email}`,
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                })
+            }
         }
         catch (err) {
             setIsEmailWrong(true);
@@ -95,6 +107,8 @@ export const UserProvider = ({ children }) => {
         Logout,
         CopyEmail,
         protectPage,
+        isCustomer,
+        setIsCustomer
     }
 
     return (

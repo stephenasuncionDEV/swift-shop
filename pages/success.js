@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Box, Flex, Text, VStack, HStack, Button } from '@chakra-ui/react'
+import { Box, Flex, Text, VStack, HStack, Button, Tag } from '@chakra-ui/react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { RiShoppingBagFill } from 'react-icons/ri'
@@ -11,7 +11,9 @@ const Success = () => {
         paymentName,
         paymentLastName,
         checkoutData,
-        goBackToCategories
+        goBackToCategories,
+        paymentMethodId,
+        paymentData
     }
     = useCore();
 
@@ -32,10 +34,16 @@ const Success = () => {
                             </HStack>
                             <Flex p='1em' flexDir='column' alignItems='center'>
                                 <Text>
-                                    Thanks for buying {paymentName} {paymentLastName}!
+                                    Thanks for buying <Tag>{paymentName} {paymentLastName}</Tag>
                                 </Text>
                                 <Text mt='1em'>
-                                    Checkout ID: {checkoutData?.id}
+                                    Checkout ID: <Tag>{checkoutData?.id}</Tag>
+                                </Text>
+                                <Text mt='.5em'>
+                                    Invoice ID: <Tag>{paymentMethodId}</Tag>
+                                </Text>
+                                <Text mt='.5em'>
+                                    Total Amount Paid: <Tag> ${paymentData?.price}</Tag>
                                 </Text>
                                 <Button mt='3em' onClick={goBackToCategories} rightIcon={<BiArrowBack />} size='lg'>
                                     Go Back To Categories
