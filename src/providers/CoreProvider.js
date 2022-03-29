@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext, createContext } from 'react'
 import { useToast } from '@chakra-ui/react'
-import Commerce from '@chec/commerce.js';
+import Commerce from '@chec/commerce.js'
 import { config } from '@/config/index'
 
 const commerce = new Commerce('pk_test_398294a9de672ab31322d419feef940b471fbaf308968');
@@ -17,6 +17,16 @@ export const CoreProvider = ({ children }) => {
     const [token, setToken] = useState();
     const [isAddingCart, setIsAddingCart] = useState(false);
     const [paymentModalState, setPaymentModalState] = useState(false);
+    const [paymentData, setPaymentData] = useState();
+    const [paymentName, setPaymentName] = useState('');
+    const [paymentEmail, setPaymentEmail] = useState('');
+    const [paymentAddress, setPaymentAddress] = useState('');
+    const [paymentCity, setPaymentCity] = useState('');
+    const [paymentState, setPaymentState] = useState('');
+    const [paymentZip, setPaymentZip] = useState('');
+    const [paymentCountry, setPaymentCountry] = useState('');
+    const [isPaying, setIsPaying] = useState(false);
+
     const toast = useToast();
     
     useEffect(() => {
@@ -105,6 +115,41 @@ export const CoreProvider = ({ children }) => {
         return res;
     }
 
+    const checkoutItem = async (stripe, elements, CardElement) => {
+        try {
+            if (!stripe || !elements) return;
+
+            const cardElement = elements.getElement(CardElement);
+    
+            const { error, paymentMethod } = await stripe.createPaymentMethod({ type: 'card', card: cardElement });
+    
+            if (error) throw new Error(error.message);
+
+            const orderData = {
+                line_items: checkoutToken.live.line_items,
+                customer: { firstname: shippingData.firstName, lastname: shippingData.lastName, email: shippingData.email },
+                shipping: { name: 'International', street: shippingData.address1, town_city: shippingData.city, county_state: shippingData.shippingSubdivision, postal_zip_code: shippingData.zip, country: shippingData.shippingCountry },
+                fulfillment: { shipping_method: shippingData.shippingOption },
+                payment: {
+                    gateway: 'stripe',
+                    stripe: {
+                        payment_method_id: paymentMethod.id,
+                    },
+                },
+            };
+
+        }
+        catch (err) {
+            toast({
+                title: 'Error',
+                description: err.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
+    }
+
     const controllers = {
         products,
         hotDeals,
@@ -123,6 +168,25 @@ export const CoreProvider = ({ children }) => {
         isAddingCart,
         paymentModalState,
         setPaymentModalState,
+        paymentData,
+        setPaymentData,
+        checkoutItem,
+        paymentName,
+        setPaymentName,
+        paymentEmail,
+        setPaymentEmail,
+        paymentAddress,
+        setPaymentAddress,
+        paymentCity,
+        setPaymentCity,
+        paymentState,
+        setPaymentState,
+        paymentZip,
+        setPaymentZip,
+        paymentCountry,
+        setPaymentCountry,
+        isPaying,
+        setIsPaying
     }
 
     return (

@@ -15,8 +15,11 @@ import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useCart } from './hooks/useCart'
 
 const PaymentModal = () => {
-    const { paymentModalState, setPaymentModalState } = useCore();
     const { 
+        paymentModalState, 
+        setPaymentModalState, 
+        paymentData, 
+        checkoutItem,
         paymentName,
         setPaymentName,
         paymentEmail,
@@ -32,7 +35,8 @@ const PaymentModal = () => {
         paymentCountry,
         setPaymentCountry,
         isPaying
-    } = useCart();
+    } = useCore();
+    
     const stripe = useStripe();
     const elements = useElements();
 
@@ -101,12 +105,12 @@ const PaymentModal = () => {
                         <Menu closeOnSelect={true}>
                             <MenuButton as={Button} bg='black' _hover={{ bg: 'rgba(0,0,0,0.8)' }} w='full' rightIcon={<FaChevronDown />} disabled={isPaying}>
                                 Pay $
-                                13.00
+                                {paymentData?.price}
                                 &nbsp;with
                             </MenuButton>
                             <MenuList>
                                 <MenuGroup title='Bank Card'>
-                                    <MenuItem>
+                                    <MenuItem onClick={() => checkoutItem(stripe, elements, CardElement)}>
                                         <HStack>
                                             <Image
                                                 boxSize='2rem'
