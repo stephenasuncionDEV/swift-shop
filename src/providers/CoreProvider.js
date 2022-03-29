@@ -41,6 +41,7 @@ export const CoreProvider = ({ children }) => {
     const [isCheckingOut, setIsCheckingOut] = useState(false);
     const [paymentMethodId, setPaymentMethodId] = useState();
     const [paymentDiscount, setPaymentDiscount] = useState('');
+    const [chargeId, setChargeId] = useState('');
     const [orders, setOrders] = useState();
     const toast = useToast();
     const router = useRouter();
@@ -198,8 +199,13 @@ export const CoreProvider = ({ children }) => {
                         code: paymentDiscount,
                     });
                 }
-                else throw new Error("Invalid Discount Code");
+                else {
+                    setPaymentDiscount('');
+                    throw new Error("Invalid Discount Code");
+                }
             }
+
+            setIsPaying(true);
 
             const cardElement = elements.getElement(CardElement);
     
@@ -237,15 +243,16 @@ export const CoreProvider = ({ children }) => {
 
             const res = await commerce.checkout.capture(checkoutData.id, orderData);
             
-            console.log(res)
-
             localStorage.setItem('swiftshop-user', 'true');
+
+            setIsPaying(false);
 
             router.push('/success', undefined, { shallow: true });
 
-            emptyCart();
+            //emptyCart();
         }
         catch (err) {
+            setIsPaying(false);
             toast({
                 title: 'Error',
                 description: err.message,
@@ -282,11 +289,39 @@ export const CoreProvider = ({ children }) => {
         const customerId = commerce.customer.id();
         const orders = await commerce.customer.getOrders(customerId);
         setOrders(orders.data);
-        console.log(orders.data)
     }
 
     const getAccessToken = async (token) => {
         await commerce.customer.getToken(token);
+    }
+
+    const refund = async () => {
+        try {
+            if (!chargeId.length) throw new Error('You must input a charge ID');
+            if (chargeId.substring(0, 3) !== 'ch_') throw new Error('Invalid charge ID');
+
+            const res = await axios.post(`${config.serverUrl}/api/payment/refund`, {
+                chargeId
+            })
+    
+            setChargeId('');
+            toast({
+                title: 'Success',
+                description: 'Successfully created a refund',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
+        catch (err) {
+            toast({
+                title: 'Error',
+                description: err.message,
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
     const controllers = {
@@ -350,7 +385,10 @@ export const CoreProvider = ({ children }) => {
         orders,
         paymentMethodId,
         paymentDiscount,
-        setPaymentDiscount
+        setPaymentDiscount,
+        chargeId,
+        setChargeId,
+        refund
     }
 
     return (

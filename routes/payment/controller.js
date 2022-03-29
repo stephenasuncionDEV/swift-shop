@@ -10,3 +10,18 @@ exports.getCoupons = async (req, res, next) => {
         next(err);
     }
 }
+
+exports.refund = async (req, res, next) => {
+    try {
+        const { chargeId } = req.body;
+
+        await stripe.refunds.create({
+            charge: chargeId,
+        });
+
+        res.status(200).send({ message: 'Successfully created a refund' });
+
+    } catch (err) {
+        next(err);
+    }
+}
