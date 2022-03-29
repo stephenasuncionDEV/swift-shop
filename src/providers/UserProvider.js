@@ -19,7 +19,7 @@ export const UserProvider = ({ children }) => {
         if (!check || !check.length) return;
         setEmail(check);
         setIsLoggedIn(true);
-    }, [])
+    }, [email])
 
     const LoginAsGuest = async () => {
         try {

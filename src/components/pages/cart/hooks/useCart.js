@@ -5,7 +5,7 @@ import { useUser } from '@/providers/UserProvider'
 export const useCart = () => {
     const { getCart, cart } = useCore();
     const { protectPage } = useUser();
-    const [total, setTotal] = useState();
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         protectPage();
