@@ -3,13 +3,13 @@ import { useCore } from '@/providers/CoreProvider'
 import { useUser } from '@/providers/UserProvider'
 
 export const useCart = () => {
-    const { getCart, cart } = useCore();
+    const { getCart, cart, setPaymentModalState } = useCore();
     const { protectPage } = useUser();
     const [total, setTotal] = useState(0);
 
     useEffect(() => {
         protectPage();
-
+        setPaymentModalState(false);
         (async () => {
             await getCart();
 		})()

@@ -4,6 +4,7 @@ import Commerce from '@chec/commerce.js'
 import { config } from '@/config/index'
 import { useUser } from '@/providers/UserProvider'
 import { useRouter } from 'next/router'
+import axios from 'axios'
 
 const commerce = new Commerce('pk_test_398294a9de672ab31322d419feef940b471fbaf308968');
 
@@ -39,6 +40,7 @@ export const CoreProvider = ({ children }) => {
     const [shippingOption, setShippingOption] = useState();
     const [isCheckingOut, setIsCheckingOut] = useState(false);
     const [paymentMethodId, setPaymentMethodId] = useState();
+    const [paymentDiscount, setPaymentDiscount] = useState('');
     const [orders, setOrders] = useState();
     const toast = useToast();
     const router = useRouter();
@@ -187,9 +189,17 @@ export const CoreProvider = ({ children }) => {
                 if (field === 0) throw new Error("Please fill in all the required fields");
             })
 
-            // await commerce.checkout.checkDiscount(checkoutData.id, {
-            //     code: 'ABC123ZYX',
-            // });
+            if (paymentDiscount.length > 0) {
+                const res = await axios.get(`${config.serverUrl}/api/payment/getCoupons`);
+                const isValid = res.data.filter(codes => codes.id == paymentDiscount).length > 0;
+
+                if (isValid) {
+                    await commerce.checkout.checkDiscount(checkoutData.id, {
+                        code: paymentDiscount,
+                    });
+                }
+                else throw new Error("Invalid Discount Code");
+            }
 
             const cardElement = elements.getElement(CardElement);
     
@@ -220,8 +230,7 @@ export const CoreProvider = ({ children }) => {
                     stripe: {
                         payment_method_id: paymentMethod.id,
                     },
-                },
-                pay_what_you_want: '1.00'
+                }
             };
 
             setPaymentMethodId(paymentMethod.id);
@@ -339,7 +348,9 @@ export const CoreProvider = ({ children }) => {
         getAccessToken,
         getOrders,
         orders,
-        paymentMethodId
+        paymentMethodId,
+        paymentDiscount,
+        setPaymentDiscount
     }
 
     return (
