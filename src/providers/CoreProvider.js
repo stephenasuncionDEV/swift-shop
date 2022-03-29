@@ -101,7 +101,7 @@ export const CoreProvider = ({ children }) => {
     }
 
     const addCustomer = async (email) => {
-        await commerce.customer.login(email, `http://localhost:3000/login?token=`);
+        await commerce.customer.login(email, `${config.serverUrl}/login?token=`);
     }
 
     const getCart = async () => {

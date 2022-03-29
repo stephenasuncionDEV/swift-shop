@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useToast, Box, Flex, ScaleFade, VStack, Text, InputGroup, InputLeftElement, Input, Button, Alert, AlertIcon, Image, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react'
-import { FiMail, FiLock } from 'react-icons/fi'
+import { FiMail } from 'react-icons/fi'
 import { useUser } from '@/providers/UserProvider'
 import { useRouter } from 'next/router'
 import { useCore } from '@/providers/CoreProvider'
