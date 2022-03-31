@@ -7,5 +7,3 @@ const exportedConfig = {
 };
 
 export const config = exportedConfig[process.env.NODE_ENV];
-
-console.log("Loaded", process.env.NODE_ENV, "config")

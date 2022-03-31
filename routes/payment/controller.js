@@ -15,11 +15,24 @@ exports.refund = async (req, res, next) => {
     try {
         const { chargeId } = req.body;
 
-        await stripe.refunds.create({
-            charge: chargeId,
-        });
+        try {
+            await stripe.refunds.create({
+                charge: chargeId,
+            });
+        }
+        catch (e) {} // Prevent "already refunded" error
 
         res.status(200).send({ message: 'Successfully created a refund' });
+
+    } catch (err) {
+        next(err);
+    }
+}
+
+exports.getCustomers = async (req, res, next) => {
+    try {
+        const customers = await stripe.customers.list();
+        res.status(200).send(customers.data);
 
     } catch (err) {
         next(err);

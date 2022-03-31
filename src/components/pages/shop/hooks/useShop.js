@@ -9,6 +9,7 @@ export const useShop = () => {
     const [categories, setCategories] = useState();
 
     useEffect(() => {
+        if (!protectPage) return;
         protectPage();
 
         (async () => {
