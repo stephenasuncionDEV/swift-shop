@@ -9,7 +9,8 @@ import { config } from '@/config/index'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
 
-const stripePromise = loadStripe(config.stripe.publicKey);
+//config.strip.publicKey
+const stripePromise = loadStripe('pk_test_51Ka9WcF6dJsgtS31ECYnAHyTvTLUQBebeUnyk5PGGsv0oYxDhyQwVnQKLrW14UHQjQWG3IDjf9DqfDwiGwCnNPbB00S3ME9f6P');
 
 const CartContent = () => {
     const { cart, removeItemCart, onCheckout, isCheckingOut } = useCore();

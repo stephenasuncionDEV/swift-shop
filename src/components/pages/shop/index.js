@@ -1,4 +1,4 @@
-import { Box, Text, Flex, Button, Wrap, WrapItem, IconButton } from '@chakra-ui/react'
+import { Box, Text, Flex, Button, Wrap, WrapItem, IconButton, Tag } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { FiExternalLink } from 'react-icons/fi'
 import { useShop } from './hooks/useShop'
@@ -13,7 +13,7 @@ const ShopContents = () => {
                     <Text fontSize="5xl" fontWeight="extrabold" color='rgb(67,122,255)'>
                         Shop by Category
                     </Text>
-                    <Wrap spacing='2em' mt='2em'>
+                    <Wrap spacing='2em' mt='4em'>
                         {categories?.map((category, idx) => (
                             <WrapItem key={idx}>
                                 <Box w='220px' bg='whiteAlpha.200' borderRadius='10px' boxShadow='rgb(9 30 66 / 25%) 0px 1px 2px 0px;' p='1em' position='relative'>

@@ -1,9 +1,10 @@
-import { Box, Text, Image, Flex, Heading, Button, VStack, HStack, SlideFade, Spinner } from '@chakra-ui/react'
+import { Box, Text, Image, Flex, Heading, Button, VStack, HStack, SlideFade, Spinner, Tag } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { useCore } from '@/providers/CoreProvider'
 import { useUser } from '@/providers/UserProvider'
 import { BsArrowRightShort } from 'react-icons/bs'
 import { FiExternalLink } from 'react-icons/fi'
+import { useLanding } from './hooks/useLanding'
 
 const SiteInfoList = [
     {src: '/assets/customer-service.jpg', heading: 'Top Customer Service ✅', subHeading: '', desc: 'Swift Shop provide the best customer experience. We provide 24 hour assistance to our customers. We help our customer both before and after they buy and use our products or services which gives them  have an easy and enjoyable experience.'},
@@ -13,11 +14,12 @@ const SiteInfoList = [
 const LandingContents = () => {
     const { isLoggedIn } = useUser();
     const { hotDeals } = useCore();
+    const { customerCount } = useLanding();
 
     return ( 
         <Flex mt="10px" flexWrap="wrap">
             <Flex justifyContent='space-between' maxW='8xl' w='full' mx='auto' px='2em' mt='10em'>
-                <VStack spacing='1.5em' maxW='630px'>
+                <VStack spacing='1.5em' maxW='630px' alignItems='flex-start'>
                     <header>
                         <Text fontSize='3.75rem' lineHeight='55pt'>
                             Find your favourite tech products
@@ -44,6 +46,9 @@ const LandingContents = () => {
                             </Button>
                         </NextLink>
                     </HStack>
+                    <Text fontSize='11pt' color='whiteAlpha.600'>
+                        <Tag>{customerCount}</Tag> guest customers have shopped with us!
+                    </Text>
                 </VStack>
                 <Box maxW='600px'>
                     <SlideFade in={true} offsetY='20px' delay={.45}>

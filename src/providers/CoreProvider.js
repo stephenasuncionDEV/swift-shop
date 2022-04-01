@@ -43,6 +43,7 @@ export const CoreProvider = ({ children }) => {
     const [paymentDiscount, setPaymentDiscount] = useState('');
     const [chargeId, setChargeId] = useState('');
     const [orders, setOrders] = useState();
+    const [isWrongChargeId, setIsWrongChargeId] = useState(false);
     const toast = useToast();
     const router = useRouter();
 
@@ -305,6 +306,7 @@ export const CoreProvider = ({ children }) => {
             })
     
             setChargeId('');
+            setIsWrongChargeId(false);
             toast({
                 title: 'Success',
                 description: 'Successfully created a refund',
@@ -314,6 +316,7 @@ export const CoreProvider = ({ children }) => {
             })
         }
         catch (err) {
+            setIsWrongChargeId(true);
             toast({
                 title: 'Error',
                 description: err.message,
@@ -393,7 +396,9 @@ export const CoreProvider = ({ children }) => {
         chargeId,
         setChargeId,
         refund,
-        customerLogout
+        customerLogout,
+        isWrongChargeId,
+        setIsWrongChargeId
     }
 
     return (
