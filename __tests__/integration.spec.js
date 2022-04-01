@@ -1,20 +1,12 @@
-import { useState, useEffect, useContext, createContext } from 'react'
-import { render, screen, fireEvent, getByTestId, getByLabelText, getByText, waitFor, findByPlaceholderText, cleanup } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { toBeInTheDocument, toBe } from '@testing-library/jest-dom'
-import Shop from '../pages/shop'
 import ShopContents from '@/components/pages/shop'
 import CartContent from '@/components/pages/cart'
 import PaymentModal from '@/components/pages/cart/PaymentModal'
 import Payments from '../pages/payments'
-import { Elements } from '@stripe/react-stripe-js'
 import '@/utils/setupTests'
-import axios from 'axios'
 import * as Mock from '../__mocks__/index.mock'
-import userEvent from '@testing-library/user-event'
 import LandingContents from '@/components/pages/landing'
-//import { useCore, CoreContext } from '@/providers/CoreProvider'
-
-jest.mock("axios");
 
 jest.mock('../src/components/pages/shop/hooks/useShop.js', () => ({
     useShop: () => ({ categories: Mock.mockCategories })
@@ -82,6 +74,7 @@ describe('payment modal', () => {
 
 // Api: Stripe
 // Feature #1: Get customers
+
 describe('landing page', () => {
     it('should display 1337 guest customers', async () => { 
         render(<LandingContents />)
