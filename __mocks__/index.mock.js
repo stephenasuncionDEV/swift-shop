@@ -36,9 +36,6 @@ export const mockCheckoutItem = jest.fn(() => {
     const res = axios.get.mockImplementation(() => Promise.resolve({ data: {
         id: 'EAC8FC3FF2'
     }}));
-
-    console.log(res)
-
 })
 
 export const mockOrders = [
@@ -58,7 +55,6 @@ export const mockRefund = jest.fn(() => {
     const res = axios.get.mockImplementation(() => Promise.resolve({ data: {
         message: 'Successfully created a refund'
     }}));
-
 
     return res.data;
 })
