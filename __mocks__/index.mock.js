@@ -41,6 +41,28 @@ export const mockCheckoutItem = jest.fn(() => {
 
 })
 
+export const mockOrders = [
+    {
+        id: 'ord_BkyN5YAnX250b6',
+        order: {
+            total_with_tax: {
+                formatted: '299.99'
+            }
+        },
+        status: 'open',
+        status_payment: 'paid'
+    }
+]
+
+export const mockRefund = jest.fn(() => {
+    const res = axios.get.mockImplementation(() => Promise.resolve({ data: {
+        message: 'Successfully created a refund'
+    }}));
+
+
+    return res.data;
+})
+
 export const mockPaymentForm = {
     paymentModalState: true, 
     setPaymentModalState: () => jest.fn(),
@@ -74,4 +96,11 @@ export const mockPaymentForm = {
     setPaymentEmail: () => jest.fn(),
     paymentDiscount: 'EAC8FC3FF2',
     setPaymentDiscount: () => jest.fn(),
+    orders: mockOrders,
+    getOrders: () => jest.fn(),
+    chargeId: '',
+    setChargeId: () => jest.fn(),
+    refund: () => mockRefund,
+    isWrongChargeId: true,
+    hotDeals: [],
 }
